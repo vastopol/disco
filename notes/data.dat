@@ -1,0 +1,22 @@
+this is probably going to be not the easiest install.
+preferably i use the simpl assembler.
+it seems like the different formats of assembly used by the tools might be incompatible
+never have tried to get simpl to run on ubuntu yet.
+
+basically simpl is an emulator/interpreter that takes in assembly code.
+the file is never actually processed into machine code on disk.
+also there isnt really an official way to link file with simpl.
+files can be linked if run the command with multiple args,
+however the addresses need to be hard set in the files themselves manually.
+
+so far haven't been able to get the lc3tools to properly work with my old asm code.
+i think the mcgrawhill stuff doesn't take some of the stuff simpl lets you do.
+
+the goal is to have both things working so that the code an be tested and debugged interactively before assembly/compilation
+the idea is to work with the examples form the book and website as much as possible and to assume that all of the input from those sources is well formed.
+that way even if never able to get any of the actual assembler/complier tools to work, there is still binary, assembly, and c code to work with
+
+there are 5 binary file that exist currently.
+preliminary work is to Dissassemble the binary files since that can be done with no compiler.
+
+there is not really a point to try and work on the decompiler part until there is a good dissassembler 

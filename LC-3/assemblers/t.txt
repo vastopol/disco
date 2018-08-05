@@ -1,6 +1,13 @@
 ON Assembly Code for LC-3
 
 should have documented the sources of some of the tools better.
+
+resources:
+http://lc3help.com/
+https://wchargin.github.io/lc3web/
+http://www.cis.upenn.edu/~milom/cse240-Fall05/handouts/lc3guide.html
+http://www.cs.utexas.edu/users/fussell/cs310h/simulator/lc3_guide.html
+http://people.cs.georgetown.edu/~squier/Teaching/HardwareFundamentals/LC3-trunk/docs/LC3-AssemblyManualAndExamples.pdf
 =====================================================================================
 
 vm_setup
