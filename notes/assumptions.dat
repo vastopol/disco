@@ -1,8 +1,0 @@
-there are going to have to be multiple assumptions about the way that the instructions are.
-This assumes fixed width 16 bit instructions, and that the files contain ascii in the form of ones and zeros: '1' and '0'
-not sure how to try handling actual binary or hex, maybe convert to the ascci then dissassemble?
-if the final binary is in complete form then it should just be a matter of taking in the files,
-then line by line breaking the assembly up into 2 chunks, and inspecting the opcode,
-after that then specifically breaking down the second chunk by instruction type into the designated fields by the instruction type
-this shouldn't be too bad to encode since there are only 15 instructions.
-if the illegal opcode is encountered throw an exception and move to the next file.

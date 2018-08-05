@@ -1,8 +1,19 @@
 #!/usr/bin/python3
 
-# LC-3 16 bit bin/hex converter
-# takes [0,1] as binary
-# takes [0-9][a-f][A-F] as hex
+# obj/bin/hex converter
+
+# Usage: $ ./conv.py [flag] <file>
+
+# flags:
+# none = binary to hex
+# -h = hex to binary
+# -o = obj to binary
+
+# files:
+# I/O ascii values:
+# bin =  [0,1]
+# hex =  [0-9][a-f][A-F]
+# obj = ?
 
 # Modules
 import sys
@@ -17,7 +28,7 @@ tables = [
 
 #========================================
 
-# 0 is bin2hex, 1 is hex2bin
+# 0 is bin2hex, 1 is hex2bin, 2 is obj2bin
 def main(file,flag):
     print("converting: ", file)
     in_file = open(file,"r")
@@ -26,9 +37,10 @@ def main(file,flag):
         line = text.strip()
         if flag == 0:
             new_str = bin2hex(line)
-            print(new_str)
-        else:
+        elif flag == 1:
             new_str = hex2bin(line)
+        else:
+            new_str = obj2bin(line)
         out_file.write(new_str+"\n")
     out_file.close()
 
@@ -36,7 +48,6 @@ def bin2hex(line):
     global tables
     hex_str = "xxxx"
     if ( len(line) % 4 ) != 0:
-        print(len(line),len(line)%4)
         print("Error: malformed instruction, length")
         return hex_str
     for c in line:
@@ -63,7 +74,14 @@ def hex2bin(line):
     # toupper each char in the line
     # check if [0-9] or [A-F] as valid hex
     print("FIXME")
-    return
+    return bin_str
+
+def obj2bin(line):
+    global tables
+    bin_str = "xxxxxxxxxxxxxxxx"
+    # take the actual raw object binary and convert to ascii
+    print("FIXME")
+    return bin_str
 
 #========================================
 
@@ -79,6 +97,14 @@ if __name__ == "__main__":
             sys.exit(1)
         else:
             flag = 1
+            files = sys.argv[2:]
+    elif sys.argv[1] == "-o":
+        if not len(sys.argv) >= 3 :
+            print("Error: Missing File Arguments")
+            print("Usage: $ ./conv.py -o <file>")
+            sys.exit(1)
+        else:
+            flag = 2
             files = sys.argv[2:]
     else:
         flag = 0
