@@ -1,6 +1,24 @@
 ON Assembly Code for LC-3
 
+should have documented the sources of some of the tools better.
 =====================================================================================
+
+vm_setup
+
+how to set up the ucr cs61 centos vm.
+
+=====================================================================================
+
+McGraw Hill source
+
+http://highered.mheducation.com/sites/0072467509/index.html
+https://highered.mheducation.com/sites/0072467509/student_view0/lc-3_simulator.html
+https://highered.mheducation.com/sites/0072467509/student_view0/lc-3_simulator_lab_manual.html
+https://highered.mheducation.com/sites/0072467509/student_view0/c_to_lc-3_compiler.html
+https://highered.mheducation.com/sites/0072467509/student_view0/source_code.html
+
+=====================================================================================
+
 STUFF from "lc3-master.zip"
 
 1. "lc3tools"
@@ -46,10 +64,6 @@ simp2.1
 
 never could get it to compile correctly...
 
-*** the binaries from from a different source, centos are in separate folder, 
+*** the binaries from from a different source, centos are in separate folder,
 
 =====================================================================================
-
-vm_setup
-
-how to set up the ucr cs61 centos vm.
