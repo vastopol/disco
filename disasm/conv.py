@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-# LC-3 bin/hex converter
+# LC-3 16 bit bin/hex converter
 # takes [0,1] as binary
 # takes [0-9][a-f][A-F] as hex
 
@@ -9,10 +9,10 @@ import sys
 
 # global
 tables = [
-    ["0","0000"], ["1","0001"], ["2","0010"], ["3","0011"],
-    ["4","0100"], ["5","0101"], ["6","0110"], ["7","0111"],
-    ["8","1000"], ["9","1001"], ["A","1010"], ["B","1011"],
-    ["C","1100"], ["D","1101"], ["E","1110"], ["F","1111"]
+    ["0000", "0001", "0010", "0011", "0100", "0101", "0110", "0111",
+     "1000", "1001", "1010", "1011", "1100", "1101", "1110", "1111"],
+    ["0", "1", "2", "3", "4", "5", "6", "7",
+     "8", "9", "A", "B", "C", "D", "E", "F"]
 ]
 
 #========================================
@@ -21,24 +21,48 @@ tables = [
 def main(file,flag):
     print("converting: ", file)
     in_file = open(file,"r")
-    #out_file = open(file+".out","w")
-    for line in in_file:
+    out_file = open(file+".out","w")
+    for text in in_file:
+        line = text.strip()
         if flag == 0:
             new_str = bin2hex(line)
+            print(new_str)
         else:
             new_str = hex2bin(line)
-        # write new to out_file
+        out_file.write(new_str+"\n")
+    out_file.close()
 
 def bin2hex(line):
     global tables
-    # check if ( # of chars in line % 4 == 0 and each char is either "1" or "0")
-    return
+    hex_str = "xxxx"
+    if ( len(line) % 4 ) != 0:
+        print(len(line),len(line)%4)
+        print("Error: malformed instruction, length")
+        return hex_str
+    for c in line:
+        if c == "0" or c == "1":
+            continue
+        else:
+            print("Error: invalid character encountered")
+            return hex_str
+    tmp_hex = ""
+    chunks = [ line[i:i+4] for i in range(0, len(line), 4) ]
+    for x in chunks:
+        if x in tables[0]:
+            place = tables[0].index(x)
+            tmp_hex += str(tables[1][place])
+        else:
+            print("Error: unknown hex value")
+            return hex_str
+    return tmp_hex
 
 
 def hex2bin(line):
     global tables
-    # toupper each char in the file
+    bin_str = "xxxxxxxxxxxxxxxx"
+    # toupper each char in the line
     # check if [0-9] or [A-F] as valid hex
+    print("FIXME")
     return
 
 #========================================
