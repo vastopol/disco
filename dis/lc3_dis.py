@@ -2,9 +2,7 @@
 
 # LC-3 Dissassembler
 # Takes in a bin file, emits an asm file
-
-# technically at this point the dissassembler handler ascii,
-# if the lcc compiler works, after compilation you would have convert from obj to bin
+# technically  the dissassembler reads ascii,
 
 # Modules
 import sys
@@ -17,16 +15,8 @@ tables = [
      "RTI", "NOT", "LDI", "STI", "JMP", "XXX", "LEA", "TRAP"]
 ]
 
-# jmp and ret have op = 1100, return is jmp r7
-# jsr and jsrr have op = 0100
-# opcode 14 is illegal instruction
-
-# Trap x20 GETC
-# Trap x21 OUT
-# Trap x22 PUTS
-# Trap x23 IN
-# Trap X24 PUTSP
-# Trap x25 HALT
+# Done: RTI, TRAP, JMP, BR, LD, LDI, LEA, ST, STI
+# Todo: ADD, JSR, AND, LDR, STR, NOT
 
 #========================================
 
@@ -43,7 +33,7 @@ def main(file):
 
 def disass(line):
     global tables
-    err_str = "xxxxxxxxxxxxxxxx"
+    err_str = ""
     if ( len(line) % 4 ) != 0:
         print("Error: malformed instruction, length")
         return err_str
@@ -54,6 +44,7 @@ def disass(line):
             print("Error: invalid character encountered")
             return err_str
 
+    # get the opcode
     op_str = ""
     body_str = ""
     op = line[0:4]
@@ -65,14 +56,44 @@ def disass(line):
         print("Error: unknown opcode")
         return err_str
 
+    # process body based on opcode
     if op_str == "XXX":
         print("Error: illegal opcode")
-        return err_str
-    if op_str == "TRAP":
+        return "ILLEGAL_OPCODE"
+    elif op_str == "RTI":
+        body_str = ""
+    elif op_str == "TRAP":
         trapno = str(hex(int(body,2)))
         body_str += " "
         body_str += trapno
-
+    elif op_str == "JMP":
+        jreg = body[3:6]
+        jregno = str(int(jreg,2))
+        body_str += " R"
+        body_str += jregno
+    elif op_str == "BR":
+        nzp = body[:3]
+        br_offset = body[3:]
+        if nzp[0] == "1":
+            op_str += "n"
+        if nzp[1] == "1":
+            op_str += "z"
+        if nzp[2] == "1":
+            op_str += "p"
+        body_str += " "
+        body_str += br_offset
+    elif ( op_str == "LD" or op_str == "LDI" or op_str == "LEA" or
+           op_str == "ST" or op_str == "STI" ):
+        reg = body[:3]
+        offset = body[3:]
+        regno = str(int(reg,2))
+        body_str += " R"
+        body_str += regno
+        body_str += ", "
+        body_str += offset
+    else:
+        body_str += " "
+        body_str += body
 
     asm_str = op_str + body_str
     return asm_str

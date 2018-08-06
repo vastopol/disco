@@ -1,0 +1,29 @@
+disasm notes
+--------------------
+
+* all.bin    = all binary examples from ch5 & ch6 in one file
+* custom.bin = handmade binary to test cases not in the examples
+
+illegal instruction op = 1101
+JSR and JSRR both have op = 0100
+JMP and RET both have op = 1100, RET is actually JMP R7
+
+Trap x20 GETC
+Trap x21 OUT
+Trap x22 PUTS
+Trap x23 IN
+Trap X24 PUTSP
+Trap x25 HALT
+
+LD, LDI, LEA, ST, STI have same decoding scheme if don't care about src/dst specifics related to 1st register
+shouldn't matter since there is only 1 register and the rest is pcoffset9
+
+
+
+JSR/JSRR needs special logic inside to determine which one based on a flag bit
+
+AND, ADD have the same decoding scheme, but also needs special logic inside to determine which one based on a flag bit
+
+also need to be careful since i think the binary isn't 1 to 1 with the assembly,
+the order of operands for the syntax can be different than the order in the bitstring.
+should only apply to some of the operations that have multiple operands
