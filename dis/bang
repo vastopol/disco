@@ -4,10 +4,18 @@
 
 if [ "$1" = "clean" ] ; then
     cd tests
-    rm *.asm
-    rm *.out
+    rm *.asm > /dev/null 2>&1
+    rm *.out > /dev/null 2>&1
     exit 0
 fi
 
-./conv.py 0 tests/*.bin
+ls tests
+
+# test converter
+#./conv.py 0 tests/*.bin
+#./conv.py 1 tests/*.bin.out
+
+# test disassembler
 ./lc3_dis.py tests/*.bin
+
+ls tests

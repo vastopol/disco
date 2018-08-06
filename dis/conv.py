@@ -7,8 +7,8 @@
 # modes:
 # 0 = bin to hex
 # 1 = hex to bin
-# 2 = bin to obj
-# 3 = obj to bin
+# 2 = bin to obj (fix)
+# 3 = obj to bin (fix)
 
 # files:
 # I/O ascii values:
@@ -52,7 +52,7 @@ def bin2hex(line):
     global tables
     hex_str = "xxxx"
     if ( len(line) % 4 ) != 0:
-        print("Error: malformed instruction, length")
+        print("Error: malformed instruction, length%4 != 0")
         return hex_str
     for c in line:
         if c == "0" or c == "1":
@@ -60,15 +60,17 @@ def bin2hex(line):
         else:
             print("Error: invalid character encountered")
             return hex_str
+
     tmp_hex = ""
     chunks = [ line[i:i+4] for i in range(0, len(line), 4) ]
     for x in chunks:
         if x in tables[0]:
             place = tables[0].index(x)
-            tmp_hex += str(tables[1][place])
+            tmp_hex += tables[1][place]
         else:
-            print("Error: unknown hex value")
+            print("Error: unknown bin value")
             return hex_str
+
     return tmp_hex
 
 #--------------------
@@ -76,10 +78,25 @@ def bin2hex(line):
 def hex2bin(line):
     global tables
     bin_str = "xxxxxxxxxxxxxxxx"
-    # toupper each char in the line
-    # check if [0-9] or [A-F] as valid hex
-    print("FIXME")
-    return bin_str
+    line1 = str.upper(line)
+    for c in line1:
+        if c in tables[1]:
+            continue
+        else:
+            print("Error: invalid character encountered")
+            return bin_str
+
+    tmp_bin = ""
+    hexes = [ x for x in line1 ]
+    for y in hexes:
+        if y in tables[1]:
+            place = tables[1].index(y)
+            tmp_bin += tables[0][place]
+        else:
+            print("Error: unknown hex value")
+            return bin_str
+
+    return tmp_bin
 
 #--------------------
 
