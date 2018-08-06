@@ -3,6 +3,9 @@
 # LC-3 Dissassembler
 # Takes in a bin file, emits an asm file
 
+# technically at this point the dissassembler handler ascii,
+# if the lcc compiler works, after compilation you would have convert from obj to bin
+
 # Modules
 import sys
 
@@ -18,6 +21,13 @@ tables = [
 # jsr and jsrr have op = 0100
 # opcode 14 is illegal instruction
 
+# Trap x20 GETC
+# Trap x21 OUT
+# Trap x22 PUTS
+# Trap x23 IN
+# Trap X24 PUTSP
+# Trap x25 HALT
+
 #========================================
 
 def main(file):
@@ -28,6 +38,8 @@ def main(file):
         new_str = disass(line.strip())
         out_file.write(new_str+"\n")
     out_file.close()
+
+#--------------------
 
 def disass(line):
     global tables
@@ -41,6 +53,7 @@ def disass(line):
         else:
             print("Error: invalid character encountered")
             return err_str
+
     op_str = ""
     body_str = ""
     op = line[0:4]
@@ -48,10 +61,19 @@ def disass(line):
     if op in tables[0]:
         place = tables[0].index(op)
         op_str = str(tables[1][place])
-        if op_str == "XXX":
-            print("Error: illegal opcode")
-            return err_str
-    # probably a big if branch or switch statement based on opcode...
+    else:
+        print("Error: unknown opcode")
+        return err_str
+
+    if op_str == "XXX":
+        print("Error: illegal opcode")
+        return err_str
+    if op_str == "TRAP":
+        trapno = str(hex(int(body,2)))
+        body_str += " "
+        body_str += trapno
+
+
     asm_str = op_str + body_str
     return asm_str
 

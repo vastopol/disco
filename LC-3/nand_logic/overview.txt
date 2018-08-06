@@ -1,13 +1,14 @@
 Logic operations on {A,B}
 
+Constants
 0 = FALSE
 1 = TRUE
 
+Variables
 A = 1100 = x0c
 B = 1010 = x0a
 
-
-Operator
+Operators
 A  B  A&B  A|B  Ax|B  A-->B  A<-->B  T
 _______________________________________
 1  1   1    1     0     1      1     1
@@ -15,8 +16,7 @@ _______________________________________
 0  1   0    1     1     1      0     1
 0  0   0    0     0     1      1     1
 
-
-Inverse
+Inverses
 !A  !B  !(A&B)  !(A|B)  !(Ax|B)  !(A-->B)  !(A<-->B)  F
 ________________________________________________________
 0    0     0       0        1        0         0      0
@@ -24,31 +24,27 @@ ________________________________________________________
 1    0     1       0        0        0         1      0
 1    1     1       1        1        0         0      0
 
+--------------------------------------------------------------------------------
 
-==================================================================
-
-NAND Logic
-----------
-
-NAND is functionally complete so can be used to construct all other operations
+NAND and NOR are both functionally complete
+Using NAND logic you can construct all other operations
 
 NAND = NOT(A AND B)
---------------------------
+
 NOT  = NOT(A AND A)
 
 AND  = NOT[NOT(A AND B) AND NOT(A AND B)]
 
 OR   = NOT[NOT(A AND A) AND NOT(B AND B)]
 
-XOR  = NOT{NOT[A AND NOT(A AND B)] AND NOT[B AND NOT(A AND B)]} 
+XOR  = NOT{NOT[A AND NOT(A AND B)] AND NOT[B AND NOT(A AND B)]}
 
 NOR  = NOT{NOT[NOT(A AND A) AND NOT(B AND B)] AND NOT[NOT(A AND A) AND NOT(B AND B)]}
 
 XNOR = NOT(NOT{NOT[A AND NOT(A AND B)] AND NOT[B AND NOT(A AND B)]})
 
-** NOR is also functionally complete **
+--------------------------------------------------------------------------------
 
-==================================================================
 HEX  BINARY
 _______________
 00   0000
@@ -67,4 +63,3 @@ _______________
 0d   1101
 0e   1110
 0f   1111
-

@@ -14,11 +14,9 @@ LD R6, ptr      ; ADDRESS
 STR R1, R6, #0  ; store: A
 STR R2, R6, #1  ; store: B
 
-
 ;AND
 AND R3, R1, R2
 STR R3, R6, #2  ; store: A and B
-
 
 ;OR
 NOT R4, R1      ; not(A)
@@ -26,7 +24,6 @@ NOT R5, R2      ; not(B)
 AND R3, R4, R5  ; not(A) and not(B)
 NOT R3, R3      ; not(not(A) and not(B))
 STR R3, R6, #3  ; store: A or B
-
 
 ;XOR
 AND R3, R1, R2  ; A and B
@@ -39,22 +36,18 @@ AND R3, R4, R5  ; not(A and not(A and B)) AND not(B and not(A and B))
 NOT R3, R3      ; not(not(A and not(A and B)) AND not(B and not(A and B)))
 STR R3, R6, #4  ; store: A xor B
 
-
 ;NOT(A)
 NOT R4, R1      ; not(A)
 STR R4, R6, #5  ; store: not(A)
-
 
 ;NOT(B)
 NOT R5, R2      ; not(B)
 STR R5, R6, #6  ; store: not(B)
 
-
 ;NAND
 AND R3, R1, R2  ; A and B
 NOT R3, R3      ; not(A and B)
 STR R3, R6, #7  ; store: A nand B
-
 
 ;NOR
 NOT R4, R1      ; not(A)
@@ -65,7 +58,6 @@ AND R4, R3, R3  ; not(not(A) and not(B)) and not(not(A) and not(B))
 NOT R4, R4      ; not(not(not(A) and not(B)) and not(not(A) and not(B)))
 STR R4, R6, #8  ; store: A nor B
 
- 
 ;XNOR
 AND R3, R1, R2  ; A and B
 NOT R3, R3      ; not(A and B)
@@ -89,7 +81,6 @@ var_B .FILL xA  ; 1010
 ptr .FILL x4000 ; store answers as remote data in x4000's
 
 .END
-
 
 ; IN MEMORY
 ;---------------------------------------------

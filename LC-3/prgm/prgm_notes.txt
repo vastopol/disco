@@ -1,0 +1,23 @@
+Program Descriptions
+--------------------
+
+prgm/
+    * bin_manip.asm
+        Takes strings of binary from user and performs bitwise operations on them
+        The program requires the libraries lib_bitwise.asm and lib_io.asm to run
+
+prgm/small/
+    * array_rev.asm
+        Takes in up to 16 chars from user, saves to array, physically reverses the array content
+
+    * fib.asm
+        Calculate the nth fibonacci number iteratively
+
+    * multiply.asm
+        Demonstrates multiplication by repetitive addition
+
+    * not.asm
+        Demonstrates 2's complement
+
+    * print_rev.asm
+        Takes in up to 16 chars from user, saves to array, prints array in reverse order

@@ -17,6 +17,8 @@ def main(file):
         out_file.write(new_str+"\n")
     out_file.close()
 
+#--------------------
+
 def ass(text):
     print(text)
     return text

@@ -1,0 +1,64 @@
+Assembly Code for LC-3
+----------------------------------------
+
+resources:
+
+http://highered.mheducation.com/sites/0072467509/index.html
+http://lc3help.com/
+https://wchargin.github.io/lc3web/
+http://www.cis.upenn.edu/~milom/cse240-Fall05/handouts/lc3guide.html
+http://www.cs.utexas.edu/users/fussell/cs310h/simulator/lc3_guide.html
+http://people.cs.georgetown.edu/~squier/Teaching/HardwareFundamentals/LC3-trunk/docs/LC3-AssemblyManualAndExamples.pdf
+
+----------------------------------------
+
+misc folders:
+
+* assemblers = sources of lc3 related tools
+* lc3_docs   = apendix a, b, and c from the book
+* src_code   = all of the bin, asm, and c examples from McGraw Hill source
+* toolbox    = current attempt to build the lc3tools and lcc from McGraw Hill source
+
+----------------------------------------
+
+* on installing an assembler:
+
+this is probably going to be not the easiest install.
+preferably i use the simpl assembler.
+it seems like the different formats of assembly used by the tools might be incompatible
+never have tried to get simpl to run on ubuntu yet.
+
+basically simpl is an emulator/interpreter that takes in assembly code.
+the file is never actually processed into machine code on disk.
+also there isnt really an official way to link file with simpl.
+files can be linked if run the command with multiple args,
+however the addresses need to be hard set in the files themselves manually.
+
+* on the lc3tools and lcc:
+
+so far haven't been able to get the lc3tools to properly work with my old asm code.
+i think the mcgrawhill stuff doesn't take some of the stuff simpl lets you do.
+
+the goal is to have both things working so that the code an be tested and debugged interactively before assembly/compilation
+the idea is to work with the examples form the book and website as much as possible and to assume that all of the input and those sources are well formed.
+that way even if never able to get any of the actual assembler/complier tools to work, there is still binary, assembly, and c code to work with
+
+* on the disassembler/decompiler:
+
+there is not really a point to try and work on the decompiler part until
+  - there is an assembler
+  - there is a disassembler
+  - there is a compiler
+
+there are 5 binary file that exist currently.
+currently there are no object files, the "binaries" contain ascii 1's and 0's
+preliminary work is to disassemble the existing binary files since that can be done with no compiler.
+
+there have to be multiple assumptions about the way that the instructions are represented.
+currently, the files contain fixed width 16 bit instructions in ascii in the form of ones and zeros: '1' and '0'
+not sure how to try handling actual raw objects/binary maybe convert to the ascii then disassemble?
+if the final file is in complete ascii form then it should just be a matter of taking in the files,
+then line by line breaking the strings up into 2 chunks, and inspecting the opcode,
+after that then specifically breaking down the second chunk by instruction type into the designated fields by the instruction type
+this shouldn't be too bad to encode since there are only 15 instructions.
+if the illegal opcode is encountered throw an exception and move to the next file.

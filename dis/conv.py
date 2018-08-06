@@ -44,6 +44,8 @@ def main(file,flag):
         out_file.write(new_str+"\n")
     out_file.close()
 
+#--------------------
+
 def bin2hex(line):
     global tables
     hex_str = "xxxx"
@@ -67,6 +69,7 @@ def bin2hex(line):
             return hex_str
     return tmp_hex
 
+#--------------------
 
 def hex2bin(line):
     global tables
@@ -75,6 +78,8 @@ def hex2bin(line):
     # check if [0-9] or [A-F] as valid hex
     print("FIXME")
     return bin_str
+
+#--------------------
 
 def obj2bin(line):
     global tables

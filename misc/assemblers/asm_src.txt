@@ -1,0 +1,74 @@
+Assemblers for the LC-3
+sources of some of the tools
+
+* bin/
+
+executable files for simpl and the libraries extracted from the CentosVM used to teach CS61 at UCR.
+
+================================================================================
+
+* vm_setup/
+
+how to set up the UCR CS61 CentOS vm.
+
+================================================================================
+
+* mcgrawhill.tar.gz
+
+McGraw Hill source code
+
+https://highered.mheducation.com/sites/0072467509/student_view0/lc-3_simulator.html
+https://highered.mheducation.com/sites/0072467509/student_view0/lc-3_simulator_lab_manual.html
+https://highered.mheducation.com/sites/0072467509/student_view0/c_to_lc-3_compiler.html
+https://highered.mheducation.com/sites/0072467509/student_view0/source_code.html
+
+================================================================================
+
+* lc3-master.zip
+
+https://github.com/edga/lc3
+
+Open source tools for LC3 (assembler, compiler, simulator and experimental C source level debugger)
+essentially a modified of the McGraw Hill Source with other added parts
+
+1. "lc3tools"
+Version 12 of the Unix LC-3 simulator from McGraw Hill Introduction to Computing Systems, 2/e
+
+Executables
+*lc3as      : LC3 assembler, input <-- file.asm, output --> file.obj AND file.sym
+*lc3convert :
+*lc3sim     : LC3 simulator, loads only .obj AND .sym files
+*lc3sim-tk  :
+
+----------------------------------------
+
+2. "lc3db"
+Alternative LC3 simulator with gdb interface (can be used with DDD front end).
+
+----------------------------------------
+
+3. "lcc-1.3"
+LCC based C compiler for LC3.
+
+----------------------------------------
+
+4. "serial"
+Serial terminal for uploading the lc3 programs onto the FPGA system.
+
+----------------------------------------
+
+5. "automated_tests"
+Tests programs to check the compliance of in-FPGA CPU with the simulator [no longer maintained].
+
+----------------------------------------
+
+6. "doc"
+Some notes on modifying the tools
+
+================================================================================
+
+* simp2.1.1b2.tar.gz
+
+simp2.1 source code, never could get it to compile correctly
+
+================================================================================
