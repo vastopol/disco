@@ -2,6 +2,14 @@
 
 # fake makefile
 
+function chkdiff()
+{
+    for $x in $( ls tests ) ; do
+        echo $x
+    done
+}
+
+
 if [ "$1" = "clean" ] ; then
     cd tests
     rm *.asm > /dev/null 2>&1
@@ -12,8 +20,9 @@ fi
 ls tests
 
 # test converter
-#./conv.py 0 tests/*.bin
-#./conv.py 1 tests/*.bin.out
+./conv.py 0 tests/*.bin
+./conv.py 1 tests/*.bin.out
+chkdiff
 
 # test disassembler
 ./lc3_dis.py tests/*.bin
