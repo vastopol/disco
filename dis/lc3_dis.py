@@ -53,7 +53,7 @@ def disass(line):
         place = tables[0].index(op)
         op_str = str(tables[1][place])
     else:
-        print("Error: unknown opcode")
+        #print("Error: unknown opcode")
         return err_str
 
     # process body based on opcode

@@ -18,8 +18,6 @@ Trap x25 HALT
 LD, LDI, LEA, ST, STI have same decoding scheme if don't care about src/dst specifics related to 1st register
 shouldn't matter since there is only 1 register and the rest is pcoffset9
 
-
-
 JSR/JSRR needs special logic inside to determine which one based on a flag bit
 
 AND, ADD have the same decoding scheme, but also needs special logic inside to determine which one based on a flag bit
@@ -27,3 +25,7 @@ AND, ADD have the same decoding scheme, but also needs special logic inside to d
 also need to be careful since i think the binary isn't 1 to 1 with the assembly,
 the order of operands for the syntax can be different than the order in the bitstring.
 should only apply to some of the operations that have multiple operands
+
+the whold newline vs carrige return is relevant. must pick only one.
+diff of file with LF vs CRLF whill be off even if every other character is the same.
+this should use LF as the choice.
