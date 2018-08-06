@@ -2,12 +2,13 @@
 
 # obj/bin/hex converter
 
-# Usage: $ ./conv.py [flag] <file>
+# Usage: $ ./conv.py <mode> <file>
 
-# flags:
-# none = binary to hex
-# -h = hex to binary
-# -o = obj to binary
+# modes:
+# 0 = bin to hex
+# 1 = hex to bin
+# 2 = bin to obj
+# 3 = obj to bin
 
 # files:
 # I/O ascii values:
@@ -28,7 +29,6 @@ tables = [
 
 #========================================
 
-# 0 is bin2hex, 1 is hex2bin, 2 is obj2bin
 def main(file,flag):
     print("converting: ", file)
     in_file = open(file,"r")
@@ -39,6 +39,8 @@ def main(file,flag):
             new_str = bin2hex(line)
         elif flag == 1:
             new_str = hex2bin(line)
+        elif flag == 2:
+            new_str = bin2obj(line)
         else:
             new_str = obj2bin(line)
         out_file.write(new_str+"\n")
@@ -81,6 +83,15 @@ def hex2bin(line):
 
 #--------------------
 
+def bin2obj(line):
+    global tables
+    obj_str = "xxxxxxxxxxxxxxxx"
+    # take the ascii and convert to actual raw object
+    print("FIXME")
+    return obj_str
+
+#--------------------
+
 def obj2bin(line):
     global tables
     bin_str = "xxxxxxxxxxxxxxxx"
@@ -91,28 +102,20 @@ def obj2bin(line):
 #========================================
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Error: Missing Arguments")
-        print("Usage: $ ./conv.py [flag] <file>")
+    if len(sys.argv) < 3:
+        print("Error: Missing argument")
+        print("Usage: $ ./conv.py <mode> <file>")
         sys.exit(1)
-    elif sys.argv[1] == "-h":
-        if not len(sys.argv) >= 3 :
-            print("Error: Missing File Arguments")
-            print("Usage: $ ./conv.py -h <file>")
-            sys.exit(1)
-        else:
-            flag = 1
-            files = sys.argv[2:]
-    elif sys.argv[1] == "-o":
-        if not len(sys.argv) >= 3 :
-            print("Error: Missing File Arguments")
-            print("Usage: $ ./conv.py -o <file>")
-            sys.exit(1)
-        else:
-            flag = 2
-            files = sys.argv[2:]
-    else:
-        flag = 0
-        files = sys.argv[1:]
+    if not str.isdigit(sys.argv[1]):
+        print("Error: Incorrect mode, nondigit")
+        print("Usage: $ ./conv.py <mode> <file>")
+        sys.exit(1)
+    if not (0 <= int(sys.argv[1])) or not (int(sys.argv[1]) <= 3):
+        print("Error: Incorrect mode, bounds")
+        print("Usage: $ ./conv.py <mode> <file>")
+        sys.exit(1)
+
+    flag = int(sys.argv[1])
+    files = sys.argv[2:]
     for file in files:
         main(file,flag)

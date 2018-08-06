@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# fake makefile
+
+if [ "$1" = "clean" ] ; then
+    cd tests
+    rm *.asm
+    rm *.out
+    exit 0
+fi
+
+./conv.py 0 tests/*.bin
+./lc3_dis.py tests/*.bin
