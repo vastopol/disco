@@ -26,6 +26,23 @@ also need to be careful since i think the binary isn't 1 to 1 with the assembly,
 the order of operands for the syntax can be different than the order in the bitstring.
 should only apply to some of the operations that have multiple operands
 
-the whold newline vs carrige return is relevant. must pick only one.
-diff of file with LF vs CRLF whill be off even if every other character is the same.
+the whole newline vs carriage return is relevant. must pick only one.
+diff of file with LF vs CRLF will be off even if every other character is the same.
 this should use LF as the choice.
+
+might need to trim the hex outputs
+since lc3 expects x25 not 0x25
+change  str(hex(int(offset,2))) -> format(int(offset,2)"X")
+so it wont prepend a 0 before x
+
+----------------------------------------
+
+bang = test harness
+disco = suite
+lc3_conv.py = format converter
+lc3_asm.py = assembler
+lc3_dis.py = disassembler
+
+the disco suite should be a shell script which invokes the other python scripts
+lc3_asm.py should be able to produce misformed code on purpose to fuzz the lc3tools
+if possible to compile lc3tools && lcc then those executables should be called to do the bin -> obj

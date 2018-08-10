@@ -1,21 +1,23 @@
 #!/bin/bash
 
-# fake makefile
+# fake makefile/test harness
 
 #----------------------------------------
 
-# take diff of original .bin file compared
-# to the file that went bin->hex->bin
+# take diff of an original file compared to the converted
+# takes 2 "arguments" for file extentions to match
+# pat = extention for converted file, suf = extention for original file
+pat=""
+suf=""
 function chkdiff()
 {
     echo "checking converted files:"
-    pat=".bin.out.out"
     files=$(ls tests | grep -E $pat)
     for f in $files ; do
         len1=$(printf "%s" "$f" | wc -m)
         len2=$(printf "%s" "$pat" | wc -m)
         end=$(expr $len1 - $len2)
-        f2=$(printf "%s" $f | cut -c 1-$end)".bin"
+        f2=$(printf "%s" $f | cut -c 1-$end)$suf
         echo "diff of $f2 and $f"
         diff -s "tests/"$f2 "tests/"$f
     done
@@ -34,12 +36,14 @@ ls tests
 echo
 
 # test converter
-./conv.py 0 tests/*.bin
-./conv.py 1 tests/*.bin.out
+./lc3_conv.py 0 tests/*.bin
+./lc3_conv.py 1 tests/*.bin.out
 
 echo
 
 # compare converted files
+pat=".bin.out.out"
+suf=".bin"
 chkdiff
 
 echo

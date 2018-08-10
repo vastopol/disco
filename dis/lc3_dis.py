@@ -63,14 +63,12 @@ def disass(line):
     elif op_str == "RTI":
         body_str = ""
     elif op_str == "TRAP":
-        trapno = str(hex(int(body,2)))
-        body_str += " "
-        body_str += trapno
+        body_str += " x"
+        body_str += format(int(body,2),"X")
     elif op_str == "JMP":
         jreg = body[3:6]
-        jregno = str(int(jreg,2))
         body_str += " R"
-        body_str += jregno
+        body_str += str(int(jreg,2))
     elif op_str == "BR":
         nzp = body[:3]
         br_offset = body[3:]
@@ -80,20 +78,19 @@ def disass(line):
             op_str += "z"
         if nzp[2] == "1":
             op_str += "p"
-        body_str += " "
-        body_str += br_offset
+        body_str += " x"
+        body_str += format(int(br_offset,2),"X")
     elif ( op_str == "LD" or op_str == "LDI" or op_str == "LEA" or
            op_str == "ST" or op_str == "STI" ):
         reg = body[:3]
         offset = body[3:]
-        regno = str(int(reg,2))
         body_str += " R"
-        body_str += regno
-        body_str += ", "
-        body_str += offset
+        body_str += str(int(reg,2))
+        body_str += ", x"
+        body_str += format(int(offset,2),"X")
     else:
-        body_str += " "
-        body_str += body
+        body_str += " x"
+        body_str += format(int(body,2),"X")
 
     asm_str = op_str + body_str
     return asm_str
