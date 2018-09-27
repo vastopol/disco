@@ -46,3 +46,19 @@ lc3_dis.py = disassembler
 the disco suite should be a shell script which invokes the other python scripts
 lc3_asm.py should be able to produce misformed code on purpose to fuzz the lc3tools
 if possible to compile lc3tools && lcc then those executables should be called to do the bin -> obj
+
+----------------------------------------
+
+dis.py  should output the markers
+.orig xHEX
+.end
+
+typical lc3 assembly will start at x3000
+
+should lable trap calls with coments
+TRAP x25 ; HALT
+
+change the random binary pc offsets & immediates to hex
+
+should look for returns and comment them
+JMP R7 ; RET
