@@ -14,10 +14,10 @@ http://people.cs.georgetown.edu/~squier/Teaching/HardwareFundamentals/LC3-trunk/
 
 misc folders:
 
-* assemblers = sources of lc3 related tools
 * lc3_docs   = apendix a, b, and c from the book
 * src_code   = all of the bin, asm, and c examples from McGraw Hill source
-* toolbox    = current attempt to build the lc3tools and lcc from McGraw Hill source
+* tools      = sources of lc3 related tools
+* workbench  = current attempt to build the lc3tools and lcc from McGraw Hill source
 
 ----------------------------------------
 

@@ -1,0 +1,106 @@
+Assemblers/Disassemblers/Simulators for the LC-3
+sources of some of the tools are noted.
+the goal of this is to have multiple options for trying to get a functioning lc3 tool chain
+Some of these yet untested files may be redundant or non functional.
+
+the files listed under tested actually work
+the untested are either in an incomplete state or have not been used yet
+
+================================================================================
+TESTED (these do work)
+================================================================================
+
+* bin
+
+executable files for simpl and the libraries extracted from the CentosVM used to teach CS61 at UCR.
+
+----------------------------------------
+
+* vm_setup
+
+how to set up the UCR CS61 CentOS vm.
+
+================================================================================
+UNTESTED
+================================================================================
+
+* mcgrawhill.tar.gz
+
+McGraw Hill source code
+
+https://highered.mheducation.com/sites/0072467509/student_view0/lc-3_simulator.html
+https://highered.mheducation.com/sites/0072467509/student_view0/lc-3_simulator_lab_manual.html
+https://highered.mheducation.com/sites/0072467509/student_view0/c_to_lc-3_compiler.html
+https://highered.mheducation.com/sites/0072467509/student_view0/source_code.html
+
+----------------------------------------
+
+* lc3-master_edga.zip
+
+https://github.com/edga/lc3
+
+Open source tools for LC3 (assembler, compiler, simulator and experimental C source level debugger)
+essentially a modified of the McGraw Hill Source with other added parts
+
+----------------------------------------
+
+* lc3-master_jph.tar
+
+https://github.com/JohnPhamous/lc3
+
+a simulator for lc3 in java
+
+----------------------------------------
+
+* lc3platform-master.zip
+
+https://github.com/haplesshero13/lc3platform
+
+ downloader and install script for the LC3 tools required for developing for the LC3 used in Dartmouth College COSC 51, Computer Architecture.
+
+----------------------------------------
+
+* LC3Programs-master
+
+https://github.com/adithyabsk/LC3Programs
+
+programs and a simulator for the lc3 form penn state in java
+
+----------------------------------------
+
+JavaLC3-master.zip
+
+https://github.com/stephen/JavaLC3
+
+A Simple LC-3 implementation in Java.
+
+----------------------------------------
+
+* hw8.zip
+
+http://www.cis.upenn.edu/~milom/cse240-Fall05/handouts/hw8.html
+
+
+University of Pennsylvania CSE240 Autumn 2005 Homework 8: LC-3 Disassembler
+
+should be a C framework for the disassembler and some assembly source code,
+in incomplete form needs to be built out
+
+----------------------------------------
+
+* PA10.tar
+
+https://www.cs.colostate.edu/~cs270/.Fall14/assignments/PA10/doc/index.html
+
+Colorado state CS 270, Fall 2014 Programming Assignment PA10 LC-3 Assembler in C
+
+should be a framework in C for an assembler for lc3
+in incomplete form needs to be built out
+
+----------------------------------------
+
+* simp2.1.1b2.tar.gz
+
+simp2.1 source code, never could get it to compile correctly
+
+----------------------------------------
