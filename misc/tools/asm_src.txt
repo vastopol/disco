@@ -7,7 +7,7 @@ the files listed under tested actually work
 the untested are either in an incomplete state or have not been used yet
 
 ================================================================================
-TESTED (these do work)
+TESTED (these work)
 ================================================================================
 
 * bin
@@ -20,20 +20,20 @@ executable files for simpl and the libraries extracted from the CentosVM used to
 
 how to set up the UCR CS61 CentOS vm.
 
-================================================================================
-UNTESTED
-================================================================================
+----------------------------------------
 
 * mcgrawhill.tar.gz
 
-McGraw Hill source code
+McGraw Hill - source code, documents, lc3tools, lcc
 
 https://highered.mheducation.com/sites/0072467509/student_view0/lc-3_simulator.html
 https://highered.mheducation.com/sites/0072467509/student_view0/lc-3_simulator_lab_manual.html
 https://highered.mheducation.com/sites/0072467509/student_view0/c_to_lc-3_compiler.html
 https://highered.mheducation.com/sites/0072467509/student_view0/source_code.html
 
-----------------------------------------
+================================================================================
+UNTESTED (unknown probability of working)
+================================================================================
 
 * lc3-master_edga.zip
 
@@ -41,14 +41,6 @@ https://github.com/edga/lc3
 
 Open source tools for LC3 (assembler, compiler, simulator and experimental C source level debugger)
 essentially a modified of the McGraw Hill Source with other added parts
-
-----------------------------------------
-
-* lc3-master_jph.tar
-
-https://github.com/JohnPhamous/lc3
-
-a simulator for lc3 in java
 
 ----------------------------------------
 
@@ -65,6 +57,14 @@ https://github.com/haplesshero13/lc3platform
 https://github.com/adithyabsk/LC3Programs
 
 programs and a simulator for the lc3 form penn state in java
+
+----------------------------------------
+
+* lc3-master_jph.tar
+
+https://github.com/JohnPhamous/lc3
+
+a simulator for lc3 in java
 
 ----------------------------------------
 
