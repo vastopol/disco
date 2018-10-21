@@ -88,6 +88,48 @@ def disass(line):
         body_str += str(int(reg,2))
         body_str += ", x"
         body_str += format(int(offset,2),"X")
+    elif op_str == "NOT":
+        reg1 = body[:3]
+        reg2 = body[3:6]
+        body_str += " R"
+        body_str += str(int(reg1,2))
+        body_str += ", R"
+        body_str += str(int(reg2,2))
+    elif op_str == "LDR" or op_str == "STR":
+        reg1 = body[:3]
+        reg2 = body[3:6]
+        offset = body[6:]
+        body_str += " R"
+        body_str += str(int(reg1,2))
+        body_str += ", R"
+        body_str += str(int(reg2,2))
+        body_str += ", x"
+        body_str += format(int(offset,2),"X")
+    elif op_str == "ADD" or op_str == "AND":
+        reg1 = body[:3]
+        reg2 = body[3:6]
+        flag = body[6]
+        rest = body[7:]
+        body_str += " R"
+        body_str += str(int(reg1,2))
+        body_str += ", R"
+        body_str += str(int(reg2,2))
+        body_str += ", "
+        if flag == "1":
+            body_str += "x"
+            body_str += format(int(rest,2),"X")
+        else:
+            body_str += "R"
+            body_str += str(int(rest,2))
+    elif op_str == "JSR":
+        flag = body[0]
+        if flag == "1":
+            body_str += " x"
+            body_str += format(int(body[1:],2),"X")
+        else:
+            op_str += "R"
+            body_str += " R"
+            body_str += str(int(body[3:6],2))
     else:
         body_str += " x"
         body_str += format(int(body,2),"X")
