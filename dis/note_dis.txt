@@ -1,0 +1,97 @@
+disasm notes
+--------------------
+
+scripts:
+
+disco = suite
+bang = test harness
+lc3_conv.py = format converter
+lc3_dis.py = disassembler
+lc3_asm.py = assembler
+
+if possible to compile lc3tools && lcc then those executables should be called to do the bin -> obj
+
+----------------------------------------
+
+test files:
+
+all.bin    = all of the binary examples from ch5 & ch6 in one file
+custom.bin = a binary to test cases for the disassembler
+
+----------------------------------------
+
+illegal instruction op = 1101
+JSR and JSRR both have op = 0100
+JMP and RET  both have op = 1100, RET is actually JMP R7
+
+Trap x20 GETC
+Trap x21 OUT
+Trap x22 PUTS
+Trap x23 IN
+Trap X24 PUTSP
+Trap x25 HALT
+
+LD, LDI, LEA, ST, STI have same decoding scheme if don't care about src/dst specifics related to 1st register
+shouldn't matter since there is only 1 register and the rest is pcoffset9
+
+LDR, STR have same decoding scheme if don't care about src/dst specifics
+
+JSR/JSRR needs special logic inside to determine which one based on a flag bit
+
+AND, ADD have the same decoding scheme, but also needs special logic inside to determine which one based on a flag bit
+
+also need to be careful since i think the binary isn't 1 to 1 with the assembly,
+the order of operands for the syntax can be different than the order in the bitstring.
+should only apply to some of the operations that have multiple operands
+
+the whole newline vs carriage return is relevant. must pick only one.
+diff of file with LF vs CRLF will be off even if every other character is the same.
+this should use LF as the choice.
+
+might need to trim the hex outputs
+since lc3 expects x25 not 0x25
+change  str(hex(int(offset,2))) -> format(int(offset,2)"X")
+so it wont prepend a 0 before x
+
+----------------------------------------
+
+possible things to do with disassembler:
+
+should output the markers
+.orig xHEX
+.end
+
+typical lc3 assembly will start at x3000
+should adjust any hex if necessary
+
+should label trap calls with comments
+TRAP x25 ; HALT
+
+should look for returns and comment them
+JMP R7 ; RET
+
+----------------------------------------
+
+on the disassembler/decompiler:
+
+there is not really a point to try and work on the decompiler part until
+  - there is an assembler   (lc3tools)
+  - there is a disassembler (disco)*
+  - there is a compiler     (lcc-1.3)
+
+disassembler:
+
+there are 5 binary file that exist currently.
+currently there are no object files, the "binaries" contain ascii 1's and 0's
+preliminary work is to disassemble the existing binary files since that can be done with no compiler.
+
+there have to be multiple assumptions about the way that the instructions are represented.
+currently, the files contain fixed width 16 bit instructions in ascii in the form of ones and zeros: '1' and '0'
+
+not sure how to try handling actual raw objects/binary maybe convert to the ascii then disassemble?
+
+if the final file is in complete ascii form then it should just be a matter of taking in the files,
+then line by line breaking the strings up into 2 chunks, and inspecting the opcode,
+after that then specifically breaking down the second chunk by instruction type into the designated fields by the instruction type
+possibly if the illegal opcode is encountered throw an exception and move to the next file.
+

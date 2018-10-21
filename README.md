@@ -1,11 +1,12 @@
 # disco
-this repo is now the home of my LC-3 assembly projects and the disassembler/decompiler project
-the asm source code is for the LC-3 assembly programming language from Patt and Patel's Introduction to Computing Systems.
 
-* dis  = disassembler/decompiler project
-* LC-3 = assembly code projects (mainly for simpl)
-* misc = notes, source, tools
+LC-3 assembly programming language from Patt and Patel's Introduction to Computing Systems.
+LC-3 assembly coding projects and the LC-3 disassembler/decompiler project
 
-The disassembler/decompiler project idea is to start with a prototype application for the LC-3 then possibly build a final version for ARM eventually.
-it would be interesting to have an assembler and a disassembler, then maybe a small c compiler and decompiler.
-this is interesting to understand the internals of compilers, assemblers, linkers, and loaders.
+* dis       = disassembler/decompiler project
+* LC-3      = assembly code projects (written for simpl assembler)
+* toolbox   = notes, source, tools
+* workbench = current build of the lc3tools and lcc-1.3 from McGraw Hill source
+
+currently working on completing a functional disassembler before starting the decompiler.
+disassembler prototype 1 complete
