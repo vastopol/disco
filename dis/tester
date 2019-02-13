@@ -6,7 +6,10 @@
 
 # take diff of an original file compared to the converted
 # takes 2 "arguments" for file extentions to match
-# pat = extention for converted file, suf = extention for original file
+# 1. pat = extention for converted file,
+# 2. suf = extention for original file
+# yes I realize I could use $1 and $2 as args, but this is more readable
+
 pat=""
 suf=""
 function chkdiff()
@@ -25,7 +28,7 @@ function chkdiff()
 
 #----------------------------------------
 
-if [ "$1" = "clean" ] ; then
+if [ "$1" = "-clean" ] ; then
     rm tests/*.asm > /dev/null 2>&1
     rm tests/*.out > /dev/null 2>&1
     exit 0
