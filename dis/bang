@@ -15,32 +15,32 @@ suf=""
 function chkdiff()
 {
     echo "checking converted files:"
-    files=$(ls tests | grep -E $pat)
+    files=$(ls tests/binary/ | grep -E $pat)
     for f in $files ; do
         len1=$(printf "%s" "$f" | wc -m)
         len2=$(printf "%s" "$pat" | wc -m)
         end=$(expr $len1 - $len2)
         f2=$(printf "%s" $f | cut -c 1-$end)$suf
         echo "diff of $f2 and $f"
-        diff -s "tests/"$f2 "tests/"$f
+        diff -s "tests/binary/"$f2 "tests/binary/"$f
     done
 }
 
 #----------------------------------------
 
 if [ "$1" = "-clean" ] ; then
-    rm tests/*.asm > /dev/null 2>&1
-    rm tests/*.out > /dev/null 2>&1
+    rm tests/binary/*.asm > /dev/null 2>&1
+    rm tests/binary/*.out > /dev/null 2>&1
     exit 0
 fi
 
 echo
-ls tests
+ls tests/binary/*
 echo
 
 # test converter
-./lc3_conv.py 0 tests/*.bin
-./lc3_conv.py 1 tests/*.bin.out
+./lc3_conv.py 0 tests/binary/*.bin
+./lc3_conv.py 1 tests/binary/*.bin.out
 
 echo
 
@@ -52,8 +52,8 @@ chkdiff
 echo
 
 # test disassembler
-./lc3_dis.py tests/*.bin
+./lc3_dis.py tests/binary/*.bin
 
 echo
-ls tests
+ls tests/binary/*
 echo

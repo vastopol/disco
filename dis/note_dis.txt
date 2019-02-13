@@ -95,3 +95,9 @@ then line by line breaking the strings up into 2 chunks, and inspecting the opco
 after that then specifically breaking down the second chunk by instruction type into the designated fields by the instruction type
 possibly if the illegal opcode is encountered throw an exception and move to the next file.
 
+----------------------------------------
+
+when use lc3convert on a .bin or .hex file it will produce single .obj file
+
+when use lc3as on a .asm file it will produce 2 files a .obj file and a .sym file for the symbol table
+

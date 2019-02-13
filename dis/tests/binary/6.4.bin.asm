@@ -1,0 +1,5 @@
+AND R2, R2, x0
+ADD R2, R2, R4
+ADD R5, R5, x1F
+BRzp x1FD
+TRAP x25

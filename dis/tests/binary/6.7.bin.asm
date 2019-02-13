@@ -1,0 +1,17 @@
+AND R0, R0, x0
+ADD R0, R0, x1
+AND R1, R1, x0
+ADD R1, R1, x1B
+AND R3, R3, x0
+ADD R3, R3, xA
+LD R4, x9
+LDR R2, R4, x0
+ADD R2, R2, R1
+BRz x5
+ADD R4, R4, x1
+ADD R3, R3, x1F
+LDR R2, R4, x0
+BRp x1FA
+AND R0, R0, x0
+TRAP x25
+ST R0, x100

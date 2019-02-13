@@ -17,17 +17,11 @@ function disco_help()
     echo "  -d  = Disassemble with lc3_dis.py"
     echo "  -h  = Display this help message"
     echo "  -s  = Simulate with lc3-sim"                # not done
-
+    echo "  -t  = Test"
 }
 
-# help prompt
-if [ "$1" = "-h" ] ; then
-    disco_help
-    exit 0
-fi
-
 # error check for flag and file >= 1
-if [ $# -lt 2 ] ; then
+if [ $# -lt 1 ] ; then
       echo "Error: Missing Arguments"
       disco_help
       exit 1
@@ -61,9 +55,13 @@ elif [ "$FLAG" = "-c" ] ; then      # compile
       $LC3CMP $2
 elif [ "$FLAG" = "-d" ] ; then      # disassemble
       ./lc3_dis.py "${FILES[@]}"
+elif  [ "$FLAG" = "-h" ] ; then     # help message
+      disco_help
 elif [ "$FLAG" = "-s" ] ; then      # simulate
       echo "Starting LC-3 Simulator"
       $LC3SIM
+elif  [ "$FLAG" = "-t" ] ; then     # test harness
+      ./bang
 else
       echo "Error: Unknown flag"
 fi
