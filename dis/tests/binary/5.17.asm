@@ -1,0 +1,19 @@
+AND R2, R2, x0
+LD R3, x10
+TRAP x23
+LDR R1, R3, x0
+ADD R4, R1, x1C
+BRz x8
+NOT R1, R1
+ADD R1, R1, x1
+ADD R1, R1, R0
+BRnp x1
+ADD R2, R2, x1
+ADD R3, R3, x1
+LDR R1, R3, x0
+BRnzp x1F6
+LD R0, x4
+ADD R0, R0, R2
+TRAP x21
+TRAP x25
+BR x30

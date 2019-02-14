@@ -7,8 +7,9 @@
 # modes:
 # 0 = bin to hex
 # 1 = hex to bin
-# 2 = bin to obj (fix)
-# 3 = obj to bin (fix)
+# 2 = obj to bin (fix)
+# 3 = bin to obj (fix)
+
 
 # files:
 # I/O ascii values:
@@ -40,9 +41,9 @@ def main(file,flag):
         elif flag == 1:
             new_str = hex2bin(line)
         elif flag == 2:
-            new_str = bin2obj(line)
-        else:
             new_str = obj2bin(line)
+        else:
+            new_str = bin2obj(line)
         out_file.write(new_str+"\n")
     out_file.close()
 

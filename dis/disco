@@ -8,11 +8,12 @@ function disco_help()
     echo "Usage:"
     echo "  $ ./disco -flag arguments"
     echo "Flags:"
-    echo "  -a  = Assemble with lc3as"                  # not done
-    echo "  -b0 = Convert bin to obj with lc3convert"   # not done
-    echo "  -b1 = Convert hex to obj with lc3convert"   # not done
+    echo "  -a  = Assemble with lc3as"
+    echo "  -b0 = Convert bin to obj with lc3convert"
+    echo "  -b1 = Convert hex to obj with lc3convert"
     echo "  -b2 = Convert bin to hex with lc3_conv.py"
     echo "  -b3 = Convert hex to bin with lc3_conv.py"
+    echo "  -b4 = Convert obj to bin with lc3_conv.py"  # not dine
     echo "  -c  = Compile with lcc"                     # not done
     echo "  -d  = Disassemble with lc3_dis.py"
     echo "  -h  = Display this help message"
@@ -50,8 +51,8 @@ function tester()
     echo
 
     # test converter
-    ./lc3_conv.py 0 tests/binary/*.bin
-    ./lc3_conv.py 1 tests/binary/*.bin.out
+    ./lc3_conv.py 0 tests/binary/*.bin      # bin to hex
+    ./lc3_conv.py 1 tests/binary/*.bin.out  # hex to bin
 
     echo
 
@@ -101,7 +102,11 @@ elif [ "$FLAG" = "-b2" ] ; then     # bin to hex
       ./lc3_conv.py 0 "${FILES[@]}"
 elif [ "$FLAG" = "-b3" ] ; then     # hex to bin
       ./lc3_conv.py 1 "${FILES[@]}"
+elif [ "$FLAG" = "-b4" ] ; then     # obj to bin
+      echo "FIXME"
+      ./lc3_conv.py 2 "${FILES[@]}"
 elif [ "$FLAG" = "-c" ] ; then      # compile
+      echo "FIXME"
       $LC3CMP $2
 elif [ "$FLAG" = "-d" ] ; then      # disassemble
       ./lc3_dis.py "${FILES[@]}"
@@ -115,8 +120,10 @@ elif  [ "$FLAG" = "-t" ] ; then      # test harness
 elif  [ "$FLAG" = "-tc" ] ; then     # clean
       rm tests/binary/*.asm > /dev/null 2>&1
       rm tests/binary/*.out > /dev/null 2>&1
-else
+else                                 # ERROR
       echo "Error: Unknown flag"
+      disco_help
+      exit 1
 fi
 
 # ----------------------------------------
