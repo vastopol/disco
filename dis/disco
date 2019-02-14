@@ -103,16 +103,17 @@ elif [ "$FLAG" = "-b2" ] ; then     # bin to hex
 elif [ "$FLAG" = "-b3" ] ; then     # hex to bin
       ./lc3_conv.py 1 "${FILES[@]}"
 elif [ "$FLAG" = "-b4" ] ; then     # obj to bin
-      echo "FIXME"
       ./lc3_conv.py 2 "${FILES[@]}"
 elif [ "$FLAG" = "-c" ] ; then      # compile
       echo "FIXME"
       $LC3CMP $2
 elif [ "$FLAG" = "-d" ] ; then      # disassemble
-      ./lc3_dis.py "${FILES[@]}"
+      ./lc3_conv.py 2 $2
+      ./lc3_dis.py $2".out"
+      # ./lc3_dis.py "${FILES[@]}"
 elif  [ "$FLAG" = "-h" ] ; then     # help message
       disco_help
-elif [ "$FLAG" = "-s" ] ; then      # simulate
+elif [ "$FLAG" = "-s" ] ; then  z    # simulate
       echo "Starting LC-3 Simulator"
       $LC3SIM
 elif  [ "$FLAG" = "-t" ] ; then      # test harness
