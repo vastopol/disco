@@ -18,7 +18,59 @@ function disco_help()
     echo "  -h  = Display this help message"
     echo "  -s  = Simulate with lc3-sim"                # not done
     echo "  -t  = Test"
+    echo "  -tc = Test Clean Up"
 }
+
+# take diff of an original file compared to the converted
+# takes 2 "arguments" for file extentions to match
+# 1. pat = extention for converted file,
+# 2. suf = extention for original file
+# yes I realize I could use $1 and $2 as args, but this is more readable
+
+pat=""
+suf=""
+function chkdiff()
+{
+    echo "checking converted files:"
+    files=$(ls tests/binary/ | grep -E $pat)
+    for f in $files ; do
+        len1=$(printf "%s" "$f" | wc -m)
+        len2=$(printf "%s" "$pat" | wc -m)
+        end=$(expr $len1 - $len2)
+        f2=$(printf "%s" $f | cut -c 1-$end)$suf
+        echo "diff of $f2 and $f"
+        diff -s "tests/binary/"$f2 "tests/binary/"$f
+    done
+}
+
+function tester()
+{
+    echo
+    ls tests/binary/*
+    echo
+
+    # test converter
+    ./lc3_conv.py 0 tests/binary/*.bin
+    ./lc3_conv.py 1 tests/binary/*.bin.out
+
+    echo
+
+    # compare converted files
+    pat=".bin.out.out"
+    suf=".bin"
+    chkdiff
+
+    echo
+
+    # test disassembler
+    ./lc3_dis.py tests/binary/*.bin
+
+    echo
+    ls tests/binary/*
+    echo
+}
+
+# ----------------------------------------
 
 # error check for flag and file >= 1
 if [ $# -lt 1 ] ; then
@@ -26,8 +78,6 @@ if [ $# -lt 1 ] ; then
       disco_help
       exit 1
 fi
-
-# ----------------------------------------
 
 # separate flag and files
 FLAG="$1"
@@ -60,8 +110,11 @@ elif  [ "$FLAG" = "-h" ] ; then     # help message
 elif [ "$FLAG" = "-s" ] ; then      # simulate
       echo "Starting LC-3 Simulator"
       $LC3SIM
-elif  [ "$FLAG" = "-t" ] ; then     # test harness
-      ./bang
+elif  [ "$FLAG" = "-t" ] ; then      # test harness
+      tester
+elif  [ "$FLAG" = "-tc" ] ; then     # clean
+      rm tests/binary/*.asm > /dev/null 2>&1
+      rm tests/binary/*.out > /dev/null 2>&1
 else
       echo "Error: Unknown flag"
 fi

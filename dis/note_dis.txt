@@ -4,7 +4,6 @@ disasm notes
 scripts:
 
 disco = suite
-bang = test harness
 lc3_conv.py = format converter
 lc3_dis.py = disassembler
 lc3_asm.py = assembler
