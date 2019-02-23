@@ -7,15 +7,16 @@
 # modes:
 # 0 = bin to hex
 # 1 = hex to bin
-# 2 = obj to bin (fix)
+# 2 = obj to bin
 # 3 = bin to obj (fix)
-
 
 # files:
 # I/O ascii values:
 # bin =  [0,1]
 # hex =  [0-9][a-f][A-F]
 # obj = ?
+
+#========================================
 
 # Modules
 import sys
@@ -117,7 +118,7 @@ def hex2bin(line):
 
 #--------------------
 
-def obj2bin(line):  # <------------- HERE
+def obj2bin(line):
     global tables
     bin_str = ""
 
@@ -137,7 +138,7 @@ def obj2bin(line):  # <------------- HERE
 
 #--------------------
 
-def bin2obj(line):
+def bin2obj(line):  # <------------- FIXME
     global tables
     obj_str = "xxxxxxxxxxxxxxxx"
     # take the ascii and convert to actual raw object

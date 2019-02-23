@@ -14,3 +14,9 @@ Typically the research focuses on x86 assembly
 
 * Function Interface Analysis: A Principled Approach for Function Recognition in COTS Binaries- http://www.seclab.cs.stonybrook.edu/seclab/pubs/dsn17.pdf
 
+* https://www.springer.com/cda/content/document/cda_downloaddocument/9780387327204-c2.pdf?SGWID=0-0-45-418460-p158968455
+
+* https://vvdveen.com/publications/Usenix2016.pdf
+
+* http://www.maqao.org/publications/techreports/madras_techreport.pdf
+

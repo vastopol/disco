@@ -3,6 +3,9 @@
 # LC-3 Dissassembler
 # Takes in a bin file, emits an asm file
 # technically  the dissassembler reads ascii,
+# this relies on lc3_conv.py to first conver the .obj file to a .bin file
+
+#========================================
 
 # Modules
 import sys
@@ -14,9 +17,6 @@ tables = [
     ["BR", "ADD", "LD", "ST", "JSR", "AND", "LDR", "STR",
      "RTI", "NOT", "LDI", "STI", "JMP", "XXX", "LEA", "TRAP"]
 ]
-
-# Done: RTI, TRAP, JMP, BR, LD, LDI, LEA, ST, STI
-# Todo: ADD, JSR, AND, LDR, STR, NOT
 
 #========================================
 

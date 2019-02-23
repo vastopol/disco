@@ -1,9 +1,73 @@
 #!/bin/bash
 
 # this is the driver for the other programs
-# eventually provide my own assembler as an option: lc3_asm.py
+# eventually provide a working assembler as an option: lc3_asm.py
 
-function disco_help()
+#----------------------------------------
+
+function main()
+{
+    # separate flag and files
+    FLAG="$1"
+    ARG_ARRAY=("$@")
+    FILES=("${ARG_ARRAY[@]:1}")
+
+    # the locations of the external executables in workbench
+    LC3ASS="./workbench/lc3tools/lc3as"
+    LC3CVT="./workbench/lc3tools/lc3convert"
+    LC3CMP="./workbench/lcc-1.3/install/lcc"
+    LC3SIM="./workbench/lc3tools/lc3sim"
+
+    # check for flag and file >= 1
+    if [ $# -lt 1 ] ; then
+          errmsg "Error: Missing Arguments"
+    fi
+
+    # run sub programs with args
+    if   [ "$FLAG" = "-a" ] ; then      # assemble
+          $LC3ASS $2
+    elif [ "$FLAG" = "-b0" ] ; then     # bin to obj
+          $LC3CVT -b2  $2
+    elif [ "$FLAG" = "-b1" ] ; then     # hex to obj
+          $LC3CVT -b16 $2
+    elif [ "$FLAG" = "-b2" ] ; then     # bin to hex
+          ./lc3_conv.py 0 "${FILES[@]}"
+    elif [ "$FLAG" = "-b3" ] ; then     # hex to bin
+          ./lc3_conv.py 1 "${FILES[@]}"
+    elif [ "$FLAG" = "-b4" ] ; then     # obj to bin
+          ./lc3_conv.py 2 "${FILES[@]}"
+    elif [ "$FLAG" = "-c" ] ; then      # compile
+          echo "FIXME"
+          $LC3CMP $2
+    elif [ "$FLAG" = "-d" ] ; then      # disassemble
+          ./lc3_conv.py 2 $2
+          ./lc3_dis.py $2".out"
+          # eventually need the symbol table to get integrated with the reversed asm code
+          # probably write another script which can take the asm file and symbol table
+          # it should then produce a integrated single asm file with the data and labels resybmolized
+    elif  [ "$FLAG" = "-h" ] ; then     # help message
+          echo; helpmsg; echo
+    elif [ "$FLAG" = "-s" ] ; then  z    # simulate
+          echo "Starting LC-3 Simulator"
+          $LC3SIM
+    elif  [ "$FLAG" = "-t" ] ; then      # test harness
+          tester
+    else                                 # ERROR
+          errmsg "Error: Unknown flag"
+    fi
+}
+
+#----------------------------------------
+
+function errmsg()
+{
+    echo; echo "$1"
+    helpmsg
+    echo
+    exit 1
+}
+
+function helpmsg()
 {
     echo "Usage:"
     echo "  $ ./disco -flag arguments"
@@ -41,8 +105,12 @@ function chkdiff()
     done
 }
 
+# tests that the file format converter and disassembler work
 function tester()
 {
+    # bin->hex to hex->bin
+    # bin->hex to hex->obj to obj->bin
+    # hex->bin to bin->obj to obj->bin to bin->hex
     echo                                        # test converter
     ./lc3_conv.py 0 tests/binary/*.bin          # bin to hex
     ./lc3_conv.py 1 tests/binary/*.bin.out      # hex to bin
@@ -57,61 +125,8 @@ function tester()
     rm tests/binary/*.out > /dev/null 2>&1
 }
 
-# ----------------------------------------
+#----------------------------------------
 
-# error check for flag and file >= 1
-if [ $# -lt 1 ] ; then
-      echo; echo "Error: Missing Arguments"
-      disco_help
-      echo
-      exit 1
-fi
+# call main function and pass command line arguments
+main $@
 
-# separate flag and files
-FLAG="$1"
-ARG_ARRAY=("$@")
-FILES=("${ARG_ARRAY[@]:1}")
-
-# the locations of the external executables in workbench
-LC3ASS="./workbench/lc3tools/lc3as"
-LC3CVT="./workbench/lc3tools/lc3convert"
-LC3CMP="./workbench/lcc-1.3/install/lcc"
-LC3SIM="./workbench/lc3tools/lc3sim"
-
-# run sub programs with args
-if   [ "$FLAG" = "-a" ] ; then      # assemble
-      $LC3ASS $2
-elif [ "$FLAG" = "-b0" ] ; then     # bin to obj
-      $LC3CVT -b2  $2
-elif [ "$FLAG" = "-b1" ] ; then     # hex to obj
-      $LC3CVT -b16 $2
-elif [ "$FLAG" = "-b2" ] ; then     # bin to hex
-      ./lc3_conv.py 0 "${FILES[@]}"
-elif [ "$FLAG" = "-b3" ] ; then     # hex to bin
-      ./lc3_conv.py 1 "${FILES[@]}"
-elif [ "$FLAG" = "-b4" ] ; then     # obj to bin
-      ./lc3_conv.py 2 "${FILES[@]}"
-elif [ "$FLAG" = "-c" ] ; then      # compile
-      echo "FIXME"
-      $LC3CMP $2
-elif [ "$FLAG" = "-d" ] ; then      # disassemble
-      ./lc3_conv.py 2 $2
-      ./lc3_dis.py $2".out"
-      # eventually need the symbol table to get integrated with the reversed asm code
-      # probably write another script which can take the asm file and symbol table
-      # it should then produce a integrated single asm file with the data and labels resybmolized
-elif  [ "$FLAG" = "-h" ] ; then     # help message
-      echo; disco_help; echo
-elif [ "$FLAG" = "-s" ] ; then  z    # simulate
-      echo "Starting LC-3 Simulator"
-      $LC3SIM
-elif  [ "$FLAG" = "-t" ] ; then      # test harness
-      tester
-else                                 # ERROR
-      echo; echo "Error: Unknown flag"
-      disco_help
-      echo
-      exit 1
-fi
-
-# ----------------------------------------
