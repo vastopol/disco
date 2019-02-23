@@ -19,64 +19,51 @@ function disco_help()
     echo "  -h  = Display this help message"
     echo "  -s  = Simulate with lc3-sim"                # not done
     echo "  -t  = Test"
-    echo "  -tc = Test Clean Up"
 }
 
 # take diff of an original file compared to the converted
-# takes 2 "arguments" for file extentions to match
-# 1. pat = extention for converted file,
-# 2. suf = extention for original file
-# yes I realize I could use $1 and $2 as args, but this is more readable
-
-pat=""
-suf=""
+# takes 3 arguments for file extentions to match
+# 1. directory of files
+# 2. extention for converted file,
+# 3. extention for original file
 function chkdiff()
 {
     echo "checking converted files:"
-    files=$(ls tests/binary/ | grep -E $pat)
-    for f in $files ; do
-        len1=$(printf "%s" "$f" | wc -m)
-        len2=$(printf "%s" "$pat" | wc -m)
+    files=$(ls $1 | grep -E $2)
+    for file in $files ; do
+        len1=$(printf "%s" "$file" | wc -m)
+        len2=$(printf "%s" "$2" | wc -m)
         end=$(expr $len1 - $len2)
-        f2=$(printf "%s" $f | cut -c 1-$end)$suf
-        echo "diff of $f2 and $f"
-        diff -s "tests/binary/"$f2 "tests/binary/"$f
+        file2=$(printf "%s" "$file" | cut -c 1-$end)"$3"
+        echo "diff of $file2 and $file"
+        diff -s "$1$file2"  "$1$file"
+        echo
     done
 }
 
 function tester()
 {
+    echo                                        # test converter
+    ./lc3_conv.py 0 tests/binary/*.bin          # bin to hex
+    ./lc3_conv.py 1 tests/binary/*.bin.out      # hex to bin
     echo
-    ls tests/binary/*
+    chkdiff  tests/binary/  .bin.out.out  .bin  # compare converted files
     echo
-
-    # test converter
-    ./lc3_conv.py 0 tests/binary/*.bin      # bin to hex
-    ./lc3_conv.py 1 tests/binary/*.bin.out  # hex to bin
-
+    ./lc3_dis.py tests/binary/*.bin             # test disassembler
     echo
-
-    # compare converted files
-    pat=".bin.out.out"
-    suf=".bin"
-    chkdiff
-
-    echo
-
-    # test disassembler
-    ./lc3_dis.py tests/binary/*.bin
-
-    echo
-    ls tests/binary/*
-    echo
+    rm tests/binary/*.asm > /dev/null 2>&1
+    rm tests/binary/*.hex > /dev/null 2>&1
+    rm tests/binary/*.obj > /dev/null 2>&1
+    rm tests/binary/*.out > /dev/null 2>&1
 }
 
 # ----------------------------------------
 
 # error check for flag and file >= 1
 if [ $# -lt 1 ] ; then
-      echo "Error: Missing Arguments"
+      echo; echo "Error: Missing Arguments"
       disco_help
+      echo
       exit 1
 fi
 
@@ -110,20 +97,20 @@ elif [ "$FLAG" = "-c" ] ; then      # compile
 elif [ "$FLAG" = "-d" ] ; then      # disassemble
       ./lc3_conv.py 2 $2
       ./lc3_dis.py $2".out"
-      # ./lc3_dis.py "${FILES[@]}"
+      # eventually need the symbol table to get integrated with the reversed asm code
+      # probably write another script which can take the asm file and symbol table
+      # it should then produce a integrated single asm file with the data and labels resybmolized
 elif  [ "$FLAG" = "-h" ] ; then     # help message
-      disco_help
+      echo; disco_help; echo
 elif [ "$FLAG" = "-s" ] ; then  z    # simulate
       echo "Starting LC-3 Simulator"
       $LC3SIM
 elif  [ "$FLAG" = "-t" ] ; then      # test harness
       tester
-elif  [ "$FLAG" = "-tc" ] ; then     # clean
-      rm tests/binary/*.asm > /dev/null 2>&1
-      rm tests/binary/*.out > /dev/null 2>&1
 else                                 # ERROR
-      echo "Error: Unknown flag"
+      echo; echo "Error: Unknown flag"
       disco_help
+      echo
       exit 1
 fi
 
