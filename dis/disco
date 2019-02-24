@@ -4,21 +4,23 @@
 
 #----------------------------------------
 
+# the locations of the externals (global)
+LC3ASS="./workbench/lc3tools/lc3as"
+LC3CVT="./workbench/lc3tools/lc3convert"
+LC3CMP="./workbench/lcc-1.3/install/lcc"
+LC3SIM="./workbench/lc3tools/lc3sim"
+DIS="./scripts/lc3_dis.py"
+CNV="./scripts/lc3_conv.py"
+ASM="./scripts/lc3_asm.py"    # not done eventually provide a working assembler as an option: lc3_asm.py
+TB="tests/binary/"
+TA="tests/assembly/"
+
 function main()
 {
     # separate flag and files
     FLAG="$1"
     ARG_ARRAY=("$@")
     FILES=("${ARG_ARRAY[@]:1}")
-
-    # the locations of the external executables in workbench (global)
-    LC3ASS="./workbench/lc3tools/lc3as"
-    LC3CVT="./workbench/lc3tools/lc3convert"
-    LC3CMP="./workbench/lcc-1.3/install/lcc"
-    LC3SIM="./workbench/lc3tools/lc3sim"
-    DIS="./scripts/lc3_dis.py"
-    CNV="./scripts/lc3_conv.py"
-    ASM="./scripts/lc3_asm.py"    # not done eventually provide a working assembler as an option: lc3_asm.py
 
     # check for flag and file >= 1
     if [ $# -lt 1 ] ; then
@@ -79,11 +81,11 @@ function helpmsg()
     echo "  -b1 = Convert hex to obj with lc3convert"
     echo "  -b2 = Convert bin to hex with lc3_conv.py"
     echo "  -b3 = Convert hex to bin with lc3_conv.py"
-    echo "  -b4 = Convert obj to bin with lc3_conv.py"  # not dine
-    echo "  -c  = Compile with lcc"                     # not done
+    echo "  -b4 = Convert obj to bin with lc3_conv.py"
+    echo "  -c  = Compile with lcc"                     # not done?
     echo "  -d  = Disassemble with lc3_dis.py"
     echo "  -h  = Display this help message"
-    echo "  -s  = Simulate with lc3-sim"                # not done
+    echo "  -s  = Simulate with lc3-sim"                # not done?
     echo "  -t  = Test"
 }
 
@@ -107,24 +109,55 @@ function chkdiff()
     done
 }
 
+function cleaner()
+{
+    echo; echo "cleaner"; echo
+
+    rm $TB*.asm > /dev/null 2>&1
+    rm $TB*.hex > /dev/null 2>&1
+    rm $TB*.obj > /dev/null 2>&1
+    rm $TB*.out > /dev/null 2>&1
+
+    rm $TA/*/*.obj > /dev/null 2>&1
+    rm $TA/*/*.sym > /dev/null 2>&1
+    rm $TA/*/*.out > /dev/null 2>&1
+    rm $TA/*/*.out.asm > /dev/null 2>&1
+}
+
 # tests that the file format converter and disassembler work
 function tester()
 {
     # bin->hex to hex->bin
     # bin->hex to hex->obj to obj->bin
     # hex->bin to bin->obj to obj->bin to bin->hex
-    echo                                        # test converter
-    $CNV 0 tests/binary/*.bin          # bin to hex
-    $CNV 1 tests/binary/*.bin.out      # hex to bin
+
     echo
-    chkdiff  tests/binary/  .bin.out.out  .bin  # compare converted files
+    echo "converter"; echo                  # test converter
+    $CNV  0  $TB*.bin                       # bin to hex
+    $CNV  1  $TB*.bin.out                   # hex to bin
     echo
-    $DIS tests/binary/*.bin             # test disassembler
+    chkdiff  $TB  .bin.out.out  .bin        # compare converted files
     echo
-    rm tests/binary/*.asm > /dev/null 2>&1
-    rm tests/binary/*.hex > /dev/null 2>&1
-    rm tests/binary/*.obj > /dev/null 2>&1
-    rm tests/binary/*.out > /dev/null 2>&1
+    $DIS  $TB*.bin                          # test disassembler
+    echo
+
+    # eventually collect all assemblable files into the assembly folder
+    # then can only loop through the good ones and assemble then disassemble and compare
+    echo "assessemble disassemble"; echo    # test assemble and disassemble
+    DIRS="chapter7_code/"
+    FARG=$(ls "$TA$DIRS")
+    echo $FARG
+    for file in $FARG ;
+    do
+        echo; echo "assessemble"; echo
+        $LC3ASS "$TA$DIRS$file"
+        echo; echo "disassemble"; echo
+        $CNV 2 "$TA$DIRS"*.obj
+        $DIS "$TA$DIRS"*.out
+    done
+
+    echo
+    cleaner
 }
 
 #----------------------------------------
