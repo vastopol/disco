@@ -1,7 +1,6 @@
 #!/bin/bash
 
 # this is the driver for the other programs
-# eventually provide a working assembler as an option: lc3_asm.py
 
 #----------------------------------------
 
@@ -12,11 +11,14 @@ function main()
     ARG_ARRAY=("$@")
     FILES=("${ARG_ARRAY[@]:1}")
 
-    # the locations of the external executables in workbench
+    # the locations of the external executables in workbench (global)
     LC3ASS="./workbench/lc3tools/lc3as"
     LC3CVT="./workbench/lc3tools/lc3convert"
     LC3CMP="./workbench/lcc-1.3/install/lcc"
     LC3SIM="./workbench/lc3tools/lc3sim"
+    DIS="./scripts/lc3_dis.py"
+    CNV="./scripts/lc3_conv.py"
+    ASM="./scripts/lc3_asm.py"    # not done eventually provide a working assembler as an option: lc3_asm.py
 
     # check for flag and file >= 1
     if [ $# -lt 1 ] ; then
@@ -31,17 +33,17 @@ function main()
     elif [ "$FLAG" = "-b1" ] ; then     # hex to obj
           $LC3CVT -b16 $2
     elif [ "$FLAG" = "-b2" ] ; then     # bin to hex
-          ./lc3_conv.py 0 "${FILES[@]}"
+          $CNV 0 "${FILES[@]}"
     elif [ "$FLAG" = "-b3" ] ; then     # hex to bin
-          ./lc3_conv.py 1 "${FILES[@]}"
+          $CNV 1 "${FILES[@]}"
     elif [ "$FLAG" = "-b4" ] ; then     # obj to bin
-          ./lc3_conv.py 2 "${FILES[@]}"
+          $CNV 2 "${FILES[@]}"
     elif [ "$FLAG" = "-c" ] ; then      # compile
           echo "FIXME"
           $LC3CMP $2
     elif [ "$FLAG" = "-d" ] ; then      # disassemble
-          ./lc3_conv.py 2 $2
-          ./lc3_dis.py $2".out"
+          $CNV 2 $2
+          $DIS $2".out"
           # eventually need the symbol table to get integrated with the reversed asm code
           # probably write another script which can take the asm file and symbol table
           # it should then produce a integrated single asm file with the data and labels resybmolized
@@ -112,12 +114,12 @@ function tester()
     # bin->hex to hex->obj to obj->bin
     # hex->bin to bin->obj to obj->bin to bin->hex
     echo                                        # test converter
-    ./lc3_conv.py 0 tests/binary/*.bin          # bin to hex
-    ./lc3_conv.py 1 tests/binary/*.bin.out      # hex to bin
+    $CNV 0 tests/binary/*.bin          # bin to hex
+    $CNV 1 tests/binary/*.bin.out      # hex to bin
     echo
     chkdiff  tests/binary/  .bin.out.out  .bin  # compare converted files
     echo
-    ./lc3_dis.py tests/binary/*.bin             # test disassembler
+    $DIS tests/binary/*.bin             # test disassembler
     echo
     rm tests/binary/*.asm > /dev/null 2>&1
     rm tests/binary/*.hex > /dev/null 2>&1
