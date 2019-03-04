@@ -120,10 +120,10 @@ function cleaner()
     rm $TB*.obj > /dev/null 2>&1
     rm $TB*.out > /dev/null 2>&1
 
-    rm $TA/*/*.obj > /dev/null 2>&1
-    rm $TA/*/*.sym > /dev/null 2>&1
-    rm $TA/*/*.out > /dev/null 2>&1
-    rm $TA/*/*.out.asm > /dev/null 2>&1
+    rm $TA*.obj > /dev/null 2>&1
+    rm $TA*.sym > /dev/null 2>&1
+    rm $TA*.out > /dev/null 2>&1
+    rm $TA*.out.asm > /dev/null 2>&1
 }
 
 # tests that the file format converter and disassembler work
@@ -146,16 +146,13 @@ function tester()
     # eventually collect all assemblable files into the assembly folder
     # then can only loop through the good ones and assemble then disassemble and compare
     echo "assessemble disassemble"; echo    # test assemble and disassemble
-    DIRS="chapter7_code/"
-    FARG=$(ls "$TA$DIRS")
-    echo $FARG
-    for file in $FARG ;
+    for file in $(ls $TA)
     do
         echo; echo "assessemble"; echo
-        $LC3ASS "$TA$DIRS$file"
-        echo; echo "disassemble"; echo
-        $CNV 2 "$TA$DIRS"*.obj
-        $DIS "$TA$DIRS"*.out
+        $LC3ASS "$TA$file"
+        echo; echo "disassemble"; echo    # probably redundant disassembling going on
+        $CNV 2 "$TA"*.obj
+        $DIS "$TA"*.out
     done
 
     echo

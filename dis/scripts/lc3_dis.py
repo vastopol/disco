@@ -66,7 +66,7 @@ def disass(line):
         body_str += " x"
         body_str += format(int(body,2),"X")
         trapno = str(format(int(body,2),"X"))
-        if   trapno == "20":    # ???
+        if   trapno == "20":  # ???
             body_str = ""
             op_str = "GETC    ; TRAP x20"
         elif trapno == "21":
@@ -88,7 +88,7 @@ def disass(line):
         jreg = body[3:6]
         body_str += " R"
         body_str += str(int(jreg,2))
-        if str(int(jreg,2)) == "7":    # ???
+        if str(int(jreg,2)) == "7":  # ???
             body_str = ""
             op_str = "RET    ; JMP R7"
     elif op_str == "BR":
@@ -102,6 +102,7 @@ def disass(line):
             op_str += "p"
         body_str += " x"
         body_str += format(int(br_offset,2),"X")
+        body_str += "    ; offset from PC"
     elif ( op_str == "LD" or op_str == "LDI" or op_str == "LEA" or
            op_str == "ST" or op_str == "STI" ):
         reg = body[:3]
@@ -110,6 +111,7 @@ def disass(line):
         body_str += str(int(reg,2))
         body_str += ", x"
         body_str += format(int(offset,2),"X")
+        body_str += "    ; offset from PC"  # ???
     elif op_str == "NOT":
         reg1 = body[:3]
         reg2 = body[3:6]
@@ -127,6 +129,7 @@ def disass(line):
         body_str += str(int(reg2,2))
         body_str += ", x"
         body_str += format(int(offset,2),"X")
+        body_str += "    ; offset into pointer"  # ???
     elif op_str == "ADD" or op_str == "AND":
         reg1 = body[:3]
         reg2 = body[3:6]
@@ -148,6 +151,7 @@ def disass(line):
         if flag == "1":
             body_str += " x"
             body_str += format(int(body[1:],2),"X")
+            body_str += "    ; offset from PC"  # ???
         else:
             op_str += "R"
             body_str += " R"
