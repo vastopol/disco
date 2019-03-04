@@ -65,10 +65,32 @@ def disass(line):
     elif op_str == "TRAP":
         body_str += " x"
         body_str += format(int(body,2),"X")
+        trapno = str(format(int(body,2),"X"))
+        if   trapno == "20":    # ???
+            body_str = ""
+            op_str = "GETC    ; TRAP x20"
+        elif trapno == "21":
+            body_str = ""
+            op_str = "OUT    ; TRAP x21"
+        elif trapno == "22":
+            body_str = ""
+            op_str = "PUTS    ; TRAP x22"
+        elif trapno == "23":
+            body_str = ""
+            op_str = "IN    ; TRAP x23"
+        elif trapno == "24":
+            body_str = ""
+            op_str = "PUTSP    ; TRAP x24"
+        elif trapno == "25":
+            body_str = ""
+            op_str = "HALT    ; TRAP x25"
     elif op_str == "JMP":
         jreg = body[3:6]
         body_str += " R"
         body_str += str(int(jreg,2))
+        if str(int(jreg,2)) == "7":    # ???
+            body_str = ""
+            op_str = "RET    ; JMP R7"
     elif op_str == "BR":
         nzp = body[:3]
         br_offset = body[3:]

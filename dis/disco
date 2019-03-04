@@ -56,6 +56,8 @@ function main()
           $LC3SIM
     elif  [ "$FLAG" = "-t" ] ; then      # test harness
           tester
+    elif  [ "$FLAG" = "-tc" ] ; then     # delete
+          cleaner
     else                                 # ERROR
           errmsg "Error: Unknown flag"
     fi
@@ -157,7 +159,6 @@ function tester()
     done
 
     echo
-    cleaner
 }
 
 #----------------------------------------
