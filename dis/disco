@@ -148,11 +148,12 @@ function tester()
     echo "assessemble disassemble"; echo    # test assemble and disassemble
     for file in $(ls $TA)
     do
-        echo; echo "assessemble"; echo
+        echo; echo "assessemble $file"; echo
         $LC3ASS "$TA$file"
-        echo; echo "disassemble"; echo    # probably redundant disassembling going on
-        $CNV 2 "$TA"*.obj
-        $DIS "$TA"*.out
+        echo; echo "disassemble $file"; echo
+        BOOM=${file%.*} # remove .asm from file name
+        $CNV 2 "$TA$BOOM".obj
+        $DIS "$TA$BOOM".obj.out
     done
 
     echo

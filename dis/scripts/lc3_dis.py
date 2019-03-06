@@ -24,9 +24,17 @@ def main(file):
     print("disassembling: ", file)
     in_file = open(file,"r")
     out_file = open(file+".asm","w")
-    for line in in_file:
+
+    first_line = in_file.readline().strip()  # get the .ORIG start address
+    orig_str = ".ORIG x" +  str(format(int(first_line,2),"X"))
+    out_file.write(orig_str+"\n")
+
+    for line in in_file:                # disassemble body
         new_str = disass(line.strip())
         out_file.write(new_str+"\n")
+
+    out_file.write(".END"+"\n")     # end of file
+
     out_file.close()
 
 #--------------------
@@ -67,23 +75,17 @@ def disass(line):
         body_str += format(int(body,2),"X")
         trapno = str(format(int(body,2),"X"))
         if   trapno == "20":  # ???
-            body_str = ""
-            op_str = "GETC    ; TRAP x20"
+            body_str += "    ; GETC"
         elif trapno == "21":
-            body_str = ""
-            op_str = "OUT    ; TRAP x21"
+            body_str += "    ; OUT"
         elif trapno == "22":
-            body_str = ""
-            op_str = "PUTS    ; TRAP x22"
+            body_str += "    ; PUTS"
         elif trapno == "23":
-            body_str = ""
-            op_str = "IN    ; TRAP x23"
+            body_str += "    ; IN"
         elif trapno == "24":
-            body_str = ""
-            op_str = "PUTSP    ; TRAP x24"
+            body_str += "    ; PUTSP"
         elif trapno == "25":
-            body_str = ""
-            op_str = "HALT    ; TRAP x25"
+            body_str += "    ; HALT"
     elif op_str == "JMP":
         jreg = body[3:6]
         body_str += " R"
