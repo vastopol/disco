@@ -1,0 +1,7 @@
+clear
+reset
+as hist.asm
+as testdata1.asm
+ld p2os.obj
+ld testdata1.obj
+ld hist.obj

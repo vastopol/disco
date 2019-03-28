@@ -2,16 +2,25 @@
 
 # this is the driver for the other programs
 
+# the lc3tools seem to take single file as input
+# also simp/simpl needs shared libraries to work
+# not done eventually provide a working assembler as an option: lc3_asm.py
+
 #----------------------------------------
 
 # the locations of the externals (global)
+SIMP="./workbench/simpl/simp"
+SIMPL="./workbench/simpl/simpl-2.0.3.bin"
+
 LC3ASS="./workbench/lc3tools/lc3as"
 LC3CVT="./workbench/lc3tools/lc3convert"
 LC3CMP="./workbench/lcc-1.3/install/lcc"
 LC3SIM="./workbench/lc3tools/lc3sim"
+
 DIS="./scripts/lc3_dis.py"
 CNV="./scripts/lc3_conv.py"
-ASM="./scripts/lc3_asm.py"    # not done eventually provide a working assembler as an option: lc3_asm.py
+ASM="./scripts/lc3_asm.py"
+
 TB="tests/binary/"
 TA="tests/assembly/"
 
@@ -51,9 +60,15 @@ function main()
           # it should then produce a integrated single asm file with the data and labels resybmolized
     elif  [ "$FLAG" = "-h" ] ; then     # help message
           echo; helpmsg; echo
-    elif [ "$FLAG" = "-s" ] ; then  z    # simulate
-          echo "Starting LC-3 Simulator"
+    elif [ "$FLAG" = "-s0" ] ; then      # simulate
+          echo "Starting LC-3 Simulator CLI"
           $LC3SIM
+    elif [ "$FLAG" = "-s1" ] ; then      # simulate
+          echo "Starting simp CLI"
+          $SIMP
+    elif [ "$FLAG" = "-s2" ] ; then      # simulate
+          echo "Starting simpl GUI"
+          $SIMPL
     elif  [ "$FLAG" = "-t" ] ; then      # test harness
           tester
     elif  [ "$FLAG" = "-tc" ] ; then     # delete
@@ -84,10 +99,12 @@ function helpmsg()
     echo "  -b2 = Convert bin to hex with lc3_conv.py"
     echo "  -b3 = Convert hex to bin with lc3_conv.py"
     echo "  -b4 = Convert obj to bin with lc3_conv.py"
-    echo "  -c  = Compile with lcc"                     # not done?
+    echo "  -c  = Compile with lcc"
     echo "  -d  = Disassemble with lc3_dis.py"
     echo "  -h  = Display this help message"
-    echo "  -s  = Simulate with lc3-sim"                # not done?
+    echo "  -s0 = Simulate with lc3-sim"
+    echo "  -s1 = Simulate with simp"
+    echo "  -s2 = Simulate with simpl"
     echo "  -t  = Test"
 }
 

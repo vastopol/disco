@@ -1,0 +1,6 @@
+clear
+reset
+as addodd.asm
+as lc3os.asm
+ld lc3os.obj
+ld addodd.obj

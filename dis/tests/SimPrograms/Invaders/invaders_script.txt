@@ -1,0 +1,5 @@
+clear
+reset
+as invaders.asm
+ld p3os.obj
+ld invaders.obj
