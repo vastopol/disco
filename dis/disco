@@ -55,15 +55,14 @@ function main()
     elif [ "$FLAG" = "-b4" ] ; then     # obj to bin
           $CNV 2 "${FILES[@]}"
     elif [ "$FLAG" = "-c" ] ; then      # compile
-          echo "FIXME"
-          $LC3CMP $2
+          $LC3CMP "${FILES[@]}"
     elif [ "$FLAG" = "-d" ] ; then      # disassemble
           $CNV 2 $2
           $DIS $2".out"
           # eventually need the symbol table to get integrated with the reversed asm code
           # probably write another script which can take the asm file and symbol table
           # it should then produce a integrated single asm file with the data and labels resybmolized
-    elif  [ "$FLAG" = "-h" ] ; then     # help message
+    elif [ "$FLAG" = "-h" ] ; then       # help message
           echo; helpmsg; echo
     elif [ "$FLAG" = "-s0" ] ; then      # simulate
           echo "Starting LC-3 Simulator CLI"
@@ -86,11 +85,11 @@ function main()
     elif [ "$FLAG" = "-s6" ] ; then      # simulate
           echo "Starting PennSim GUI v2"
           java -jar $PENN2
-    elif  [ "$FLAG" = "-t0" ] ; then     # test convert/assemble
+    elif [ "$FLAG" = "-t0" ] ; then      # test convert/assemble
           tester
-    elif  [ "$FLAG" = "-t1" ] ; then     # test simulate
+    elif [ "$FLAG" = "-t1" ] ; then      # test simulate
           simulator
-    elif  [ "$FLAG" = "-tc" ] ; then     # delete
+    elif [ "$FLAG" = "-tc" ] ; then      # delete
           cleaner
     else                                 # ERROR
           errmsg "Error: Unknown flag"
@@ -172,14 +171,20 @@ function cleaner()
     DIR="$TS/AddOdd"
     rm $DIR/*.obj > /dev/null 2>&1
     rm $DIR/*.sym > /dev/null 2>&1
+    rm $DIR/*.out > /dev/null 2>&1
+    rm $DIR/*.out.asm > /dev/null 2>&1
 
     DIR="$TS/Histogram"
+    rm $DIR/*.out > /dev/null 2>&1
+    rm $DIR/*.out.asm > /dev/null 2>&1
     rm $DIR/hist.obj > /dev/null 2>&1
     rm $DIR/hist.sym > /dev/null 2>&1
     rm $DIR/testdata1.obj > /dev/null 2>&1
     rm $DIR/testdata1.sym > /dev/null 2>&1
 
     DIR="$TS/Invaders"
+    rm $DIR/*.out > /dev/null 2>&1
+    rm $DIR/*.out.asm > /dev/null 2>&1
     rm $DIR/invaders.obj > /dev/null 2>&1
     rm $DIR/invaders.sym > /dev/null 2>&1
 }

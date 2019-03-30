@@ -46,8 +46,8 @@ SED = /bin/sed
 MAKE = /usr/bin/make
 AR = /usr/bin/ar
 RANLIB = /usr/bin/ranlib
-INSTALL_DIR = /home/duluoz/Desktop/vastopol/disco/misc/workbench/lcc-1.3/install
-TOP_DIR = /home/duluoz/Desktop/vastopol/disco/misc/workbench/lcc-1.3
+INSTALL_DIR = /home/duluoz/Desktop/vastopol/disco/dis/workbench/lcc-1.3/install
+TOP_DIR = /home/duluoz/Desktop/vastopol/disco/dis/workbench/lcc-1.3
 # End of configuration block.
 
 CFLAGS  = -g -I.

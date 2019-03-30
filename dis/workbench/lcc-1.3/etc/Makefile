@@ -46,8 +46,8 @@ SED = /bin/sed
 MAKE = /usr/bin/make
 AR = /usr/bin/ar
 RANLIB = /usr/bin/ranlib
-LCCDIR = /home/duluoz/Desktop/vastopol/disco/misc/workbench/lcc-1.3/install
-BASEDIR = /home/duluoz/Desktop/vastopol/disco/misc/workbench/lcc-1.3
+LCCDIR = /home/duluoz/Desktop/vastopol/disco/dis/workbench/lcc-1.3/install
+BASEDIR = /home/duluoz/Desktop/vastopol/disco/dis/workbench/lcc-1.3
 # End of configuration block.
 
 CFLAGS  = -g -DLCCDIR='"${LCCDIR}/"' -DBASEDIR='"${BASEDIR}/"'

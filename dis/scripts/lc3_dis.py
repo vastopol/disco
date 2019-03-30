@@ -66,7 +66,7 @@ def disass(line):
 
     # process body based on opcode
     if op_str == "XXX":
-        print("Error: illegal opcode")
+        # print("Error: illegal opcode")
         return "ILLEGAL_OPCODE"
     elif op_str == "RTI":
         body_str = ""
@@ -75,17 +75,23 @@ def disass(line):
         body_str += format(int(body,2),"X")
         trapno = str(format(int(body,2),"X"))
         if   trapno == "20":  # ???
-            body_str += "    ; GETC"
+            body_str = ""
+            op_str = "GETC    ; TRAP x20"
         elif trapno == "21":
-            body_str += "    ; OUT"
+            body_str = ""
+            op_str = "OUT    ; TRAP x21"
         elif trapno == "22":
-            body_str += "    ; PUTS"
+            body_str = ""
+            op_str = "PUTS    ; TRAP x22"
         elif trapno == "23":
-            body_str += "    ; IN"
+            body_str = ""
+            op_str = "IN    ; TRAP x23"
         elif trapno == "24":
-            body_str += "    ; PUTSP"
+            body_str = ""
+            op_str = "PUTSP    ; TRAP x24"
         elif trapno == "25":
-            body_str += "    ; HALT"
+            body_str = ""
+            op_str = "HALT    ; TRAP x25"
     elif op_str == "JMP":
         jreg = body[3:6]
         body_str += " R"
