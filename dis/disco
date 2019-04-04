@@ -32,9 +32,7 @@ LC3SIM="workbench/lc3tools/lc3sim"
 function main()
 {
     # separate flag and files
-    FLAG="$1"
-    ARG_ARRAY=("$@")
-    FILES=("${ARG_ARRAY[@]:1}")
+    IFS=' ' read -r FLAG FILES <<< "$@"
 
     # check for flag and file >= 1
     if [ $# -lt 1 ] ; then
@@ -49,13 +47,14 @@ function main()
     elif [ "$FLAG" = "-b1" ] ; then     # hex to obj
           $LC3CVT -b16 $2
     elif [ "$FLAG" = "-b2" ] ; then     # bin to hex
-          $CNV 0 "${FILES[@]}"
+          # $CNV 0 "${FILES[@]}"
+          $CNV 0 $FILES
     elif [ "$FLAG" = "-b3" ] ; then     # hex to bin
-          $CNV 1 "${FILES[@]}"
+          $CNV 1 $FILES
     elif [ "$FLAG" = "-b4" ] ; then     # obj to bin
-          $CNV 2 "${FILES[@]}"
+          $CNV 2 $FILES
     elif [ "$FLAG" = "-c" ] ; then      # compile
-          $LC3CMP "${FILES[@]}"
+          $LC3CMP $FILES
     elif [ "$FLAG" = "-d" ] ; then      # disassemble
           $CNV 2 $2
           $DIS $2".out"
@@ -69,22 +68,16 @@ function main()
           $LC3SIM
     elif [ "$FLAG" = "-s1" ] ; then      # simulate
           echo "Starting simp CLI"
-          $SIMP1
+          $SIMP1 $FILES
     elif [ "$FLAG" = "-s2" ] ; then      # simulate
           echo "Starting simpl GUI"
-          $SIMP2
+          $SIMP2 $FILES
     elif [ "$FLAG" = "-s3" ] ; then      # simulate
-          echo "Starting PennSim CLI v1"
-          java -jar $PENN1 -t
+          echo "Starting PennSim 1"
+          java -jar $PENN1 $FILES
     elif [ "$FLAG" = "-s4" ] ; then      # simulate
-          echo "Starting PennSim GUI v1"
-          java -jar $PENN1
-    elif [ "$FLAG" = "-s5" ] ; then      # simulate
-          echo "Starting PennSim CLI v2"
-          java -jar $PENN2 -t
-    elif [ "$FLAG" = "-s6" ] ; then      # simulate
-          echo "Starting PennSim GUI v2"
-          java -jar $PENN2
+          echo "Starting PennSim 2"
+          java -jar $PENN2 $FILES
     elif [ "$FLAG" = "-t0" ] ; then      # test convert/assemble
           tester
     elif [ "$FLAG" = "-t1" ] ; then      # test simulate
@@ -123,12 +116,10 @@ function helpmsg()
     echo "  -s0 = Simulate with lc3-sim CLI"
     echo "  -s1 = Simulate with simp CLI"
     echo "  -s2 = Simulate with simpl GUI"
-    echo "  -s3 = Simulate with PennSim CLI v1"
-    echo "  -s4 = Simulate with PennSim GUI v1"
-    echo "  -s5 = Simulate with PennSim CLI v2"
-    echo "  -s6 = Simulate with PennSim GUI v2"
+    echo "  -s3 = Simulate with PennSim 1 CLI/GUI"
+    echo "  -s4 = Simulate with PennSim 2 CLI/GUI"
     echo "  -t0 = Test disassembler"
-    echo "  -t1 = Test simulator 6"
+    echo "  -t1 = Test simulators"
     echo "  -tc = Clean up test files"
 }
 
@@ -209,8 +200,7 @@ function tester()
     # eventually collect all assemblable files into the assembly folder
     # then can only loop through the good ones and assemble then disassemble and compare
     echo "assessemble disassemble"; echo    # test assemble and disassemble
-    for file in $(ls $TA)
-    do
+    for file in $(ls $TA) ; do
         echo; echo "assessemble $file"; echo
         $LC3ASS "$TA$file"
         echo; echo "disassemble $file"; echo
