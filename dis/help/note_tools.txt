@@ -3,6 +3,23 @@ C to LC-3 compiler
 
 ----------
 
+my scripts:
+
+disco = suite
+lc3_conv.py = format converter
+lc3_dis.py = disassembler
+lc3_asm.py = assembler (unstarted)
+
+if possible to compile lc3tools && lcc then those executables should be called to do the bin -> obj
+
+  - there is an assembler   (lc3tools)
+  - there is a disassembler (disco)
+  - there is a compiler     (lcc-1.3)
+
+----------------------------------------
+
+lc3tools && lcc
+
 not so simple to use:
 lcc
 rcc
@@ -19,11 +36,6 @@ also needs to have the lc3as be in the install/ folder
 lcc currently seems to have problems with the #include preprocessor directives
 
 ----------
-
-also looks like some registers have special purposes:
-r4 - global data pointer
-r5 - frame pointer
-r6 - stack pointer
 
 ----------
 
@@ -155,4 +167,64 @@ line contains more than 16 digits  ---- instruction bigger than 16-bits.
 contains unrecognizable characters ---- invalid characters were used.
 constant outside of allowed range  ---- Immediate value exceeds instruction's range.
 
+
+----------------------------------------
+
+possible errors with lc3as
+
+can check like:
+for f in $(ls tests/assembly/chapter10_code/) ; do echo $f; workbench/lc3tools/lc3as tests/assembly/chapter10_code/$f; done
+
+good run:
+
+STARTING PASS 1
+0 errors found in first pass.
+STARTING PASS 2
+0 errors found in second pass.
+
+errors: chapter8
+
+chapter8_code/8.5.asm
+STARTING PASS 1
+  1: label appears before .ORIG
+  1: instruction appears before .ORIG
+ 34: contains unrecognizable characters
+ 35: contains unrecognizable characters
+ 36: contains unrecognizable characters
+ 43: no .END directive found
+6 errors found in first pass.
+
+chapter8_code/8.echo.asm
+STARTING PASS 1
+  1: label appears before .ORIG
+  1: instruction appears before .ORIG
+ 12: no .END directive found
+3 errors found in first pass.
+
+chapter8_code/8.simple_input.asm
+STARTING PASS 1
+  1: label appears before .ORIG
+  1: instruction appears before .ORIG
+  7: no .END directive found
+3 errors found in first pass.
+
+chapter8_code/8.simple_output.asm
+STARTING PASS 1
+  1: label appears before .ORIG
+  1: instruction appears before .ORIG
+  7: no .END directive found
+3 errors found in first pass.
+
+errors: chapter9
+
+chapter9_code/9.ascii_to_int.asm
+STARTING PASS 1
+  1: instruction appears before .ORIG
+ 14: no .END directive found
+2 errors found in first pass.
+
+chapter9_code/9.lowercase.asm
+STARTING PASS 1
+ 13: no .END directive found
+1 errors found in first pass.
 

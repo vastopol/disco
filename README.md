@@ -10,7 +10,7 @@ This project targets the LC-3 assembly programming language from Patt and Patel'
 
 disassembler prototype 1 complete
 
-currently working on completing a reassembling disassembler before starting the decompiler.
+currently working on completing a reassembling disassembler before starting the decompiler phase.
 
 `disco` is integrated with the `lc3tools` and `lcc-1.3` C language compiler.
 
@@ -18,6 +18,13 @@ currently working on completing a reassembling disassembler before starting the 
 
 LC-3 assembly coding projects and the LC-3 disassembler/decompiler project
 
-* dis       = disassembler/decompiler project
-* LC-3      = assembly code projects (written for simpl simulator)
+* asm      = LC-3 assembly code
+* dis       = disassembler suite
 * toolbox   = notes, source, tools
+
+## Goals
+
+Research papers on disassembly, reassembly, binary analysis, etc... typically focuses on x86 assembly.
+The idea is that eventually the work on `disco` could possibly be used for Risc architecture reverse engineering.
+This could be applicable towards Mips, Risc V, Arm, and Thumb architectures in particular.
+

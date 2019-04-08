@@ -1,21 +1,20 @@
 disasm notes
---------------------
-
-scripts:
-
-disco = suite
-lc3_conv.py = format converter
-lc3_dis.py = disassembler
-lc3_asm.py = assembler (unstarted)
-
-if possible to compile lc3tools && lcc then those executables should be called to do the bin -> obj
 
 ----------------------------------------
 
-test files:
+working test cases
+- binary files
+- assembly files
 
-all.bin    = all of the binary examples from ch5 & ch6 in one file
-custom.bin = a binary to test cases for the disassembler
+The mcgraw hill source comes with some tests.
+They provide a set of binary, assembly, and c programs.
+However, only some of the files will assemble correctly.
+
+when use lc3convert on a .bin or .hex file it will produce single .obj file
+when use lc3as on a .asm file it will produce 2 files a .obj file and a .sym file for the symbol table
+lc3as can only take 1 file at a time and it produces a single object file with its corresponding symbol table
+
+so far the c compiler is not working correctly (FIXME)
 
 ----------------------------------------
 
@@ -52,16 +51,11 @@ since lc3 expects x25 not 0x25
 change  str(hex(int(offset,2))) -> format(int(offset,2)"X")
 so it wont prepend a 0 before x
 
-----------------------------------------
-
 possible things to do with disassembler:
 
 should output the markers
 .orig xHEX
 .end
-
-typical lc3 assembly will start at x3000
-should adjust any hex if necessary
 
 should label trap calls with comments
 TRAP x25 ; HALT
@@ -71,27 +65,125 @@ JMP R7 ; RET
 
 ----------------------------------------
 
-on the disassembler/decompiler:
-
-there is not really a point to try and work on the decompiler part until
-  - there is an assembler   (lc3tools)
-  - there is a disassembler (disco)
-  - there is a compiler     (lcc-1.3)
-
 disassembler:
 
-there are 5 binary file that exist currently.
-currently there are no object files, the "binaries" contain ascii 1's and 0's
-preliminary work is to disassemble the existing binary files since that can be done with no compiler.
+the disassembler does not work on object files, the "binaries" contain ascii 1's and 0's
+first the object file is converted from raw binary form to an ascii representation.
+then the preliminary work is to disassemble the the program off of the encoding scheme.
 
-there have to be multiple assumptions about the way that the instructions are represented.
-currently, the files contain fixed width 16 bit instructions in ascii in the form of ones and zeros: '1' and '0'
+lc-3 assembly is a flat mapping the .obj files and .hex files and .bin files will be the same.
+open a .obj file in hexedit and it will show the same byte values as in the .hex files
 
-not sure how to try handling actual raw objects/binary maybe convert to the ascii then disassemble?
+strategy:
 
 if the final file is in complete ascii form then it should just be a matter of taking in the files,
 then line by line breaking the strings up into 2 chunks, and inspecting the opcode,
 after that then specifically breaking down the second chunk by instruction type into the designated fields by the instruction type
 possibly if the illegal opcode is encountered throw an exception and move to the next file.
 
+there are multiple assumptions about the way that the instructions are represented.
+based on this some heuristics can be used to try and make the disassembly more accurate.
+for example:
+    - the files contain fixed width 16 bit instructions in ascii in the form of ones and zeros: '1' and '0'
+    - there is only one instruction per line
+    - the first line of the file is always the .orig address
+    - only use traps 20-25
+    - etc...
+
+for valid files which can be assembled
+the assembly code for lc3 programs are structured as such
+
+.orig <HEX address>
+code
+.end
+
+typical in each program
+    start at x3000 (user code lc3 assembly, but not always true)
+    only 1 .end
+    only 1 .orig
+
 ----------------------------------------
+
+problems:
+
+disco being a linear sweep disassembler suffers from the well known problem of
+being unable to distinguish data from code when the two are mixed together
+
+the problem is where the data segments are located
+
+the lc3as assembler seems to be a flat disassemble which directly translates the .asm ascii file
+into a byte version of the the hex encoding of the instructions
+
+for a .obj file the first line can be assumed to be the origin address
+the origin address is directly translated to hex
+
+data can be
+.fill
+.blkw
+.stringz
+
+the data appears to BR instructions since it looks like most of the first bits on the left are zeros
+for a block word it will appear as then binary form of the unsigned 16-bit integer which represents its size
+
+also for compilation looks like some registers have special purposes:
+r4 - global data pointer
+r5 - frame pointer
+r6 - stack pointer
+
+----------------------------------------
+
+how to deal with this...
+
+* knowledge about pseudo ops
+
+.FILL value
+allocate one word, initialize with value
+
+.BLKW number
+allocate multiple words of storage, value unspecified
+
+.STRINGZ n-character string
+allocate n+1 locations, initialize w/characters and null terminator
+
+* Muti-Word Assembler Directives
+
+.BLKW #4
+
+shorthand for:
+
+.FILL x0
+.FILL x0
+.FILL x0
+.FILL x0
+
+.STRINGZ “Hello”
+
+shorthand for:
+
+.FILL x48 ; ‘H’
+.FILL x65 ; ‘e’
+.FILL x6C ; ‘l’
+.FILL x6C ; ‘l’
+.FILL x6F ; ‘o’
+.FILL x0  ; NULL terminator
+
+* check certain opcodes
+
+if out of reasonable range, treat it as an .FILL address
+
+PCoffset9
+
+BR
+
+LD, ST. LDI, STI, LEA
+
+JSR
+
+TRAP
+
+could assume
+
+ Restriction:
+ simple disassembler can only handle the LC3 assembly language which
+ put ".FILL" in the bottom of the code and without .BLKW or .STRINGZ
+
