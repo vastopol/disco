@@ -68,13 +68,15 @@ def disass(line):
     if op_str == "XXX":
         # print("Error: illegal opcode")
         return "ILLEGAL_OPCODE"
+
     elif op_str == "RTI":
         body_str = ""
-    elif op_str == "TRAP":
+
+    elif op_str == "TRAP":      # check for .FILL
         body_str += " x"
         body_str += format(int(body,2),"X")
         trapno = str(format(int(body,2),"X"))
-        if   trapno == "20":  # ???
+        if   trapno == "20":
             body_str = ""
             op_str = "GETC    ; TRAP x20"
         elif trapno == "21":
@@ -92,14 +94,19 @@ def disass(line):
         elif trapno == "25":
             body_str = ""
             op_str = "HALT    ; TRAP x25"
+        else:  # assume is .FILL pseudo op
+            op_str = ".FILL"
+            body_str = " x" + format(int(line,2),"X")
+
     elif op_str == "JMP":
         jreg = body[3:6]
         body_str += " R"
         body_str += str(int(jreg,2))
-        if str(int(jreg,2)) == "7":  # ???
+        if str(int(jreg,2)) == "7":
             body_str = ""
             op_str = "RET    ; JMP R7"
-    elif op_str == "BR":
+
+    elif op_str == "BR":    # check for .FILL
         nzp = body[:3]
         br_offset = body[3:]
         if nzp[0] == "1":
@@ -111,7 +118,14 @@ def disass(line):
         body_str += " x"
         body_str += format(int(br_offset,2),"X")
         body_str += "    ; offset from PC"
-    elif ( op_str == "LD" or op_str == "LDI" or op_str == "LEA" or
+        if int(nzp,2) == 0:  # assume is .FILL pseudo op
+            op_str = ".FILL"
+            body_str = " x" + format(int(line,2),"X")
+            if (int(line,2) > 31 and int(line,2) < 127): # ascii value
+                cmt_str = "    ;  '" + str(chr(int(line,2))) + "'"
+                body_str += cmt_str
+
+    elif ( op_str == "LD" or op_str == "LDI" or op_str == "LEA" or  # check for .FILL
            op_str == "ST" or op_str == "STI" ):
         reg = body[:3]
         offset = body[3:]
@@ -120,6 +134,7 @@ def disass(line):
         body_str += ", x"
         body_str += format(int(offset,2),"X")
         body_str += "    ; offset from PC"  # ???
+
     elif op_str == "NOT":
         reg1 = body[:3]
         reg2 = body[3:6]
@@ -127,6 +142,7 @@ def disass(line):
         body_str += str(int(reg1,2))
         body_str += ", R"
         body_str += str(int(reg2,2))
+
     elif op_str == "LDR" or op_str == "STR":
         reg1 = body[:3]
         reg2 = body[3:6]
@@ -138,6 +154,7 @@ def disass(line):
         body_str += ", x"
         body_str += format(int(offset,2),"X")
         body_str += "    ; offset into pointer"  # ???
+
     elif op_str == "ADD" or op_str == "AND":
         reg1 = body[:3]
         reg2 = body[3:6]
@@ -154,7 +171,8 @@ def disass(line):
         else:
             body_str += "R"
             body_str += str(int(rest,2))
-    elif op_str == "JSR":
+
+    elif op_str == "JSR":   # check for .FILL
         flag = body[0]
         if flag == "1":
             body_str += " x"
@@ -164,6 +182,7 @@ def disass(line):
             op_str += "R"
             body_str += " R"
             body_str += str(int(body[3:6],2))
+
     else:
         body_str += " x"
         body_str += format(int(body,2),"X")

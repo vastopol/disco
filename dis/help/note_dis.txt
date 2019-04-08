@@ -88,6 +88,7 @@ for example:
     - there is only one instruction per line
     - the first line of the file is always the .orig address
     - only use traps 20-25
+    - no illegal opcodes will be found
     - etc...
 
 for valid files which can be assembled
@@ -110,6 +111,7 @@ disco being a linear sweep disassembler suffers from the well known problem of
 being unable to distinguish data from code when the two are mixed together
 
 the problem is where the data segments are located
+These can be freely mixed with the code
 
 the lc3as assembler seems to be a flat disassemble which directly translates the .asm ascii file
 into a byte version of the the hex encoding of the instructions
@@ -145,7 +147,7 @@ allocate multiple words of storage, value unspecified
 .STRINGZ n-character string
 allocate n+1 locations, initialize w/characters and null terminator
 
-* Muti-Word Assembler Directives
+* Muti-Word Assembler Directives become groups of .FILL
 
 .BLKW #4
 
@@ -167,23 +169,67 @@ shorthand for:
 .FILL x6F ; ‘o’
 .FILL x0  ; NULL terminator
 
+----------------------------------------
+
 * check certain opcodes
 
 if out of reasonable range, treat it as an .FILL address
 
-PCoffset9
-
-BR
-
-LD, ST. LDI, STI, LEA
-
-JSR
-
 TRAP
+    if not 0x20 - 0x25 then must be a .FILL
 
-could assume
+BR (PCoffset9)
+    if offset is 0 then must be a .FILL
 
- Restriction:
- simple disassembler can only handle the LC3 assembly language which
- put ".FILL" in the bottom of the code and without .BLKW or .STRINGZ
+LD, ST. LDI, STI, LEA (PCoffset9)
+
+JSR (PCoffset11)
+
+
+seems like .BLKW will always become a BR x0
+so all offset 0 jumps are really data
+
+seems like a .FILL on any non zero will probably be a branch if it was positive
+
+seems like the .STRINGZ usually ends up as BR instructions with no condition flags
+
+this will be a series of BR followed by the .FILL x0 for the null byte
+this could probably be used to notice when decoding a piece of data
+notice that a BR will be decoded as a BRnzp by the disassembler,
+this is because the unconditional branches are translated to canonical for during assembly.
+this means that finding a BR in the instructions means that is a piece of data because flags cant be unset to none
+
+other things sometimes show up as wrong after a HALT
+
+ST R0, x100
+
+other errors
+
+MASK  .FILL x7FFF -> STR R7, R7, x3F
+
+PTR   .FILL x4000 -> JSRR R0
+
+
+-----------
+
+for resymbolization and identification of data structures
+
+groups of .FILL x0 are probably .BLKW
+
+large groups of .FILL of various size [0,127] ended by .FILL x0 are probably .STRINGZ
+
+memory mapped i/o keyboards
+
+DSR     .FILL   xFE04
+DDR     .FILL   xFE06
+KBSR    .FILL   xFE00
+KBDR    .FILL   xFE02
+
+see 9.9.asm for a good model of how routines are structured
+
+stores save registers
+code
+loads restore registers
+return
+local data includes space to store registers
 
