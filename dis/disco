@@ -65,9 +65,14 @@ function main()
           # it should then produce a integrated single asm file with the data and labels resybmolized
     elif [ "$FLAG" = "-h" ] ; then       # help message
           echo; helpmsg; echo
-    elif [ "$FLAG" = "-p" ] ; then      # disassemble
+    elif [ "$FLAG" = "-p" ] ; then      # patch
           $STP $2
           $PAT $2".out"
+    elif [ "$FLAG" = "-r" ] ; then      # reassemble
+          $CNV 2 $2
+          $DIS $2".out"
+          $STP $2".out.asm"
+          $PAT $2".out.asm.out"
     elif [ "$FLAG" = "-s0" ] ; then      # simulate
           echo "Starting LC-3 Simulator CLI"
           $LC3SIM
@@ -119,6 +124,7 @@ function helpmsg()
     echo "  -d  = Disassemble with lc3_dis.py"
     echo "  -h  = Display this help message"
     echo "  -p  = Patch assembly code"
+    echo "  -r  = reassemble patch object code"
     echo "  -s0 = Simulate with lc3-sim CLI"
     echo "  -s1 = Simulate with simp CLI"
     echo "  -s2 = Simulate with simpl GUI"

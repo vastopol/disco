@@ -1,18 +1,7 @@
 #!/usr/bin/python3
 
 # generate patch code
-# single detour bsed patch
-
-# when patch should be applied steps:
-# disassemble the original file
-# resymbolize
-# remov the last line .END
-# append code patch
-# change first lines of code to detour launch
-# probably have to cout size of launc stub,
-# so can redirect back to original program by address
-
-# probably launch patches with a JSR to label
+# single detour based patch
 
 # Modules
 import sys
@@ -35,31 +24,41 @@ def main(file):
     '''
     out_file.write(stub+"\n")
 
-    body = []
     # write out the body, but remove .END
+    body = []
     for line in in_file:
         body.append(line)
     body.pop()
     for x in body:
         out_file.write(x)
 
-    dispatch='''
-    ; dispatcher subroutine
-    ; handle patches then run main program
+    # subroutine dispatch handler
+    d1='''
+    ; dispatcher handles patches then runs main program
     PATCHCODE:
     ST R7, startp
+    '''
 
-    JSR PATCH1
+    d2=""
+    num_patches=1
+    for i in range(num_patches):
+        d2+="JSR PATCH"+str(i+1)+"\n"
 
+    d3='''
     LD R7, startp
     RET
     startp .BLKW 1
     '''
+
+    dispatch = d1 + d2 + d3
     out_file.write(dispatch)
 
     # write out patches
     pcode = patch()
     out_file.write(pcode)
+
+    # re-insert the end marker
+    end=".END"
 
     out_file.close()
 
@@ -115,10 +114,7 @@ def patch():
     pmsg .STRINGZ \"PATCHED\\n\"
     '''
 
-    # re-insert the end marker
-    end=".END"
-
-    text = head + code + ret + data + end
+    text = head + code + ret + data
 
     return text
 

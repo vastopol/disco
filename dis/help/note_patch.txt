@@ -1,0 +1,29 @@
+when patch should be applied steps:
+disassemble the original file
+resymbolize
+remove the last line .END
+append code patch
+change first lines of code to detour launch
+probably have to count size of launch stub,
+so can redirect back to original program by address
+
+launch patches with a JSR to label
+
+would be nice to have multiple patch methods
+1. single front detour stub in front, code patches in rear
+2. full front load code patches and redirect upfront
+3. append patch to rear, then find and replace other JSR labels to jump to this patch
+
+should have ability to apply multiple patches
+have an array of object which represent patches
+apply each patch in order
+patches can be of different types
+
+each patch has 4 parts:
+header + code + return + local data
+
+
+./disco -tc; ./disco -a tests/assembly/strange1.asm; ./disco -r tests/assembly/strange1.obj
+
+./disco -s2 tests/assembly/strange1.obj.out.asm.out.asm
+

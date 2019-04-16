@@ -11,7 +11,7 @@ def main(file):
     for line in in_file:
         stripper = line.split(";")
         if stripper[0].strip() != "":
-            out_file.write(stripper[0])
+            out_file.write(stripper[0]+"\n")
 
 #----------------------------------------
 
