@@ -17,6 +17,8 @@ TS="tests/SimPrograms"
 DIS="scripts/lc3_dis.py"
 CNV="scripts/lc3_conv.py"
 ASM="scripts/lc3_asm.py"
+PAT="scripts/lc3_patch.py"
+STP="scripts/strip_cmt.py"
 
 SIMP1="workbench/simpl/simp"
 SIMP2="workbench/simpl/simpl-2.0.3.bin"
@@ -63,6 +65,9 @@ function main()
           # it should then produce a integrated single asm file with the data and labels resybmolized
     elif [ "$FLAG" = "-h" ] ; then       # help message
           echo; helpmsg; echo
+    elif [ "$FLAG" = "-p" ] ; then      # disassemble
+          $STP $2
+          $PAT $2".out"
     elif [ "$FLAG" = "-s0" ] ; then      # simulate
           echo "Starting LC-3 Simulator CLI"
           $LC3SIM
@@ -113,6 +118,7 @@ function helpmsg()
     echo "  -c  = Compile with lcc"
     echo "  -d  = Disassemble with lc3_dis.py"
     echo "  -h  = Display this help message"
+    echo "  -p  = Patch assembly code"
     echo "  -s0 = Simulate with lc3-sim CLI"
     echo "  -s1 = Simulate with simp CLI"
     echo "  -s2 = Simulate with simpl GUI"

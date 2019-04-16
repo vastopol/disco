@@ -67,7 +67,10 @@ def disass(line):
     # process body based on opcode
     if op_str == "XXX":
         # print("Error: illegal opcode")
-        return "ILLEGAL_OPCODE"
+        # return "ILLEGAL_OPCODE"
+        op_str = ".FILL"
+        body_str = " x" + format(int(line,2),"X")
+        body_str += "    ; ILLEGAL_OPCODE ?"    # probably will ba a .FILL in a well formed file
 
     elif op_str == "RTI":
         body_str = ""
@@ -118,7 +121,7 @@ def disass(line):
         body_str += " x"
         body_str += format(int(br_offset,2),"X")
         body_str += "    ; offset from PC"
-        if int(nzp,2) == 0:  # assume is .FILL pseudo op
+        if int(nzp,2) == 0:  # assume is .FILL pseudo op, can't have no flags set
             op_str = ".FILL"
             body_str = " x" + format(int(line,2),"X")
             if (int(line,2) > 31 and int(line,2) < 127): # ascii value
