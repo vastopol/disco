@@ -7,11 +7,12 @@ import sys
 def main(file):
     in_file = open(file,"r")
     out_file = open(file+".out","w")
-
+    print("Strip")
     for line in in_file:
         stripper = line.split(";")
-        if stripper[0].strip() != "":
-            out_file.write(stripper[0]+"\n")
+        stripo = stripper[0].strip()
+        if stripo != "" and stripo != "\n":
+            out_file.write(stripo+"\n")
 
 #----------------------------------------
 

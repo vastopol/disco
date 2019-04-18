@@ -1,7 +1,7 @@
 lcc-1.3
 C to LC-3 compiler
 
-----------
+----------------------------------------
 
 my scripts:
 
@@ -33,11 +33,33 @@ configure; make; make install; make clean;
 
 also needs to have the lc3as be in the install/ folder
 
-lcc currently seems to have problems with the #include preprocessor directives
+**********
 
-----------
+ERROR:
 
-----------
+preprocessor
+
+cpp currently seems to have problems with the #include preprocessor directives
+
+./disco -c tests/c/chapter16_code/fig16.4.c
+cpp: tests/c/chapter16_code/fig16.4.c:1 Syntax error in #include
+
+file:
+
+    workbench/lcc-1.3/cpp/include.c
+
+function:
+
+    void doinclude(Tokenrow *trp)
+
+error:
+
+    if (trp->tp < trp->lp)
+
+* FIXME ?
+    comment out the check and it works sort of
+
+----------------------------------------
 
 note pages:
 
@@ -51,7 +73,7 @@ http://www.cs.utexas.edu/users/fussell/cs310h/compilerLC3.shtml
 https://github.com/haplesshero13/lcc-lc3
 https://github.com/dinomight/LC3Tools
 
-----------
+----------------------------------------
 
 USAGE:
 
@@ -84,7 +106,7 @@ lcc [ option | file ]...
 -Woarg	specify system-specific `arg'
 -W[pfal]arg	pass `arg' to the preprocessor, compiler, assembler, or linker
 
-----------
+----------------------------------------
 
 rcc
 ./workbench/lcc-1.3/install/rcc: unknown target; must specify one of
@@ -101,7 +123,7 @@ rcc
 	-target=bytecode
 	-target=null
 
-----------
+----------------------------------------
 
 howto:
 
@@ -118,7 +140,7 @@ Notice that the assembler also produces the usual auxiliary files filename.hex a
 
 If the output file name is not specified by the -o option, then the output is written to a.asm, a.obj, a.hex and a.dbg.
 
------------------------------
+----------------------------------------
 
 
 LC3 assembler tools, unix version (Lumetta)

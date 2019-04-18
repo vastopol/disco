@@ -3,6 +3,12 @@
 #include <string.h>
 #include "cpp.h"
 
+/*
+	NOTICE:
+	Modified te source code to disable one of the preprocessor checks
+	seems to generate mostly correct assembly code but some of the label/variable names are bad
+*/
+
 Includelist	includelist[NINCLUDE];
 
 extern char	*objname;
@@ -16,8 +22,10 @@ doinclude(Tokenrow *trp)
 	FILE *fd;
 
 	trp->tp += 1;
-	if (trp->tp>=trp->lp)
+	if (trp->tp>=trp->lp){
+		// fprintf(stderr,"1\n");
 		goto syntax;
+	}
 	if (trp->tp->type!=STRING && trp->tp->type!=LT) {
 		len = trp->tp - trp->bp;
 		expandrow(trp, "<include>");
@@ -34,17 +42,32 @@ doinclude(Tokenrow *trp)
 		trp->tp++;
 		while (trp->tp->type!=GT) {
 			if (trp->tp>trp->lp || len+trp->tp->len+2 >= sizeof(fname))
+			{
+				// fprintf(stderr,"2\n");
 				goto syntax;
+			}
 			strncpy(fname+len, (char*)trp->tp->t, trp->tp->len);
 			len += trp->tp->len;
 			trp->tp++;
 		}
 		angled = 1;
-	} else
+	} else{
+		// fprintf(stderr,"3\n");
 		goto syntax;
+	}
 	trp->tp += 2;
-	if (trp->tp < trp->lp || len==0)
+	// if (trp->tp < trp->lp){  /* ERROR HERE */
+	// 	fprintf(stderr,"4\n");
+	// 	fprintf(stderr,"%d\n",(int)trp->tp);
+	// 	fprintf(stderr,"%s\n",trp->tp->t);
+	// 	fprintf(stderr,"%d\n",(int)trp->lp);
+	// 	fprintf(stderr,"%s\n",trp->lp->t);
+	// 	goto syntax;
+	// }
+	if (len==0){
+		// fprintf(stderr,"5\n");
 		goto syntax;
+	}
 	fname[len] = '\0';
 	if (fname[0]=='/') {
 		fd = fopen(fname, "r");

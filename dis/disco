@@ -2,10 +2,12 @@
 
 # lc3 disassembly multitool
 # this is the driver for the other programs
-
 # lc3tools mostly take single file as input
 # simp/simpl needs shared libraries to work
-# TODO: eventually provide my working assembler as an option: lc3_asm.py
+
+# TODO:
+# provide working assembler as an option: lc3_asm.py
+# make a resymbolizer
 
 #----------------------------------------
 
@@ -49,7 +51,6 @@ function main()
     elif [ "$FLAG" = "-b1" ] ; then     # hex to obj
           $LC3CVT -b16 $2
     elif [ "$FLAG" = "-b2" ] ; then     # bin to hex
-          # $CNV 0 "${FILES[@]}"
           $CNV 0 $FILES
     elif [ "$FLAG" = "-b3" ] ; then     # hex to bin
           $CNV 1 $FILES
@@ -60,9 +61,6 @@ function main()
     elif [ "$FLAG" = "-d" ] ; then      # disassemble
           $CNV 2 $2
           $DIS $2".out"
-          # eventually need the symbol table to get integrated with the reversed asm code
-          # probably write another script which can take the asm file and symbol table
-          # it should then produce a integrated single asm file with the data and labels resybmolized
     elif [ "$FLAG" = "-h" ] ; then       # help message
           echo; helpmsg; echo
     elif [ "$FLAG" = "-p" ] ; then      # patch
@@ -73,9 +71,12 @@ function main()
           $DIS $2".out"
           $STP $2".out.asm"
           $PAT $2".out.asm.out"
+          $STP $2".out.asm.out.asm"
+          cp  $2".out.asm.out.asm.out"  $2".out.asm.out.asm.out.asm"
+          $LC3ASS $2".out.asm.out.asm.out.asm"
     elif [ "$FLAG" = "-s0" ] ; then      # simulate
           echo "Starting LC-3 Simulator CLI"
-          $LC3SIM
+          $LC3SIM $FILES
     elif [ "$FLAG" = "-s1" ] ; then      # simulate
           echo "Starting simp CLI"
           $SIMP1 $FILES

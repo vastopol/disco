@@ -59,6 +59,7 @@ def main(file):
 
     # re-insert the end marker
     end=".END"
+    out_file.write(end)
 
     out_file.close()
 
