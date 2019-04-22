@@ -115,23 +115,23 @@ function helpmsg()
     echo "Usage:"
     echo "  $ ./disco -flag arguments"
     echo "Flags:"
-    echo "  -a  = Assemble with lc3as"
-    echo "  -b0 = Convert bin to obj with lc3convert"
-    echo "  -b1 = Convert hex to obj with lc3convert"
-    echo "  -b2 = Convert bin to hex with lc3_conv.py"
-    echo "  -b3 = Convert hex to bin with lc3_conv.py"
-    echo "  -b4 = Convert obj to bin with lc3_conv.py"
-    echo "  -c  = Compile with lcc"
-    echo "  -d  = Disassemble with lc3_dis.py"
+    echo "  -a  = Assemble asm file"    # lc3as
+    echo "  -b0 = Convert bin to obj"   # lc3convert
+    echo "  -b1 = Convert hex to obj"   # lc3convert
+    echo "  -b2 = Convert bin to hex"   # lc3_conv.py
+    echo "  -b3 = Convert hex to bin"   # lc3_conv.py
+    echo "  -b4 = Convert obj to bin"   # lc3_conv.py
+    echo "  -c  = Compile C file"       # lcc-1.3
+    echo "  -d  = Disassemble obj file" # lc3_dis.py
     echo "  -h  = Display this help message"
     echo "  -p  = Patch assembly code"
-    echo "  -r  = reassemble patch object code"
+    echo "  -r  = Reassemble patch obj file"
     echo "  -s0 = Simulate with lc3-sim CLI"
     echo "  -s1 = Simulate with simp CLI"
     echo "  -s2 = Simulate with simpl GUI"
     echo "  -s3 = Simulate with PennSim 1 CLI/GUI"
     echo "  -s4 = Simulate with PennSim 2 CLI/GUI"
-    echo "  -t0 = Test disassembler"
+    echo "  -t0 = Test scripts"
     echo "  -t1 = Test simulators"
     echo "  -tc = Clean up test files"
 }

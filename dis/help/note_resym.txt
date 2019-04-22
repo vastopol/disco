@@ -1,0 +1,55 @@
+./disco -t0
+./scripts/strip_cmt.py tests/assembly/7.2.obj.out.asm
+./scripts/lc3_resym.py tests/assembly/7.2.obj.out.asm.out
+
+-----------
+
+for resymbolization and identification of data structures
+
+groups of .FILL x0 are probably .BLKW
+
+large groups of .FILL of various size [0,127] ended by .FILL x0 are probably .STRINGZ
+
+memory mapped i/o keyboards
+
+DSR     .FILL   xFE04
+DDR     .FILL   xFE06
+KBSR    .FILL   xFE00
+KBDR    .FILL   xFE02
+
+see 9.9.asm for a good model of how routines are structured
+
+stores save registers
+code
+loads restore registers
+return
+local data includes space to store registers
+
+------------
+
+negative numbers
+
+ [sim] 6: ADD R1, R1, -->x1F<--
+ [sim]  `-> Constant 31 overflows a signed 5-bit field.
+
+branch backwards
+
+ [sim] 7: BRp -->x1FD<-- ; offset from PC
+ [sim]  `-> Constant 509 overflows a signed 9-bit field.
+
+
+max values
+
+anything >= 0 can be in hex: x0
+negatives must be decimal: #-1
+
+imm5 signed 5 bit value [-16,15]
+
+x1f,xf
+
+PCoffset9 signed 9 bit value [-256,255]
+
+x1fd,xff
+
+
+
