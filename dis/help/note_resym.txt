@@ -1,6 +1,5 @@
-./disco -t0
-./scripts/strip_cmt.py tests/assembly/7.2.obj.out.asm
-./scripts/lc3_resym.py tests/assembly/7.2.obj.out.asm.out
+./disco -tc; ./disco -a tests/assembly/up2lo.asm; ./disco -d tests/assembly/up2lo.obj
+
 
 -----------
 

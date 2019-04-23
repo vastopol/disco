@@ -7,7 +7,7 @@ import sys
 def main(file):
     in_file = open(file,"r")
     out_file = open(file+".out","w")
-    print("Strip")
+    print("Strip: "+file)
     for line in in_file:
         stripper = line.split(";")
         stripo = stripper[0].strip()

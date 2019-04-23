@@ -52,7 +52,7 @@ def resym(start,body):
     # locate labels and variables
     for inst in body:
         block = inst.strip().split(" ")
-        print(); print(hex(pc),"\t",block)
+        # print(); print(hex(pc),"\t",block)
         pc += 1
 
         # variables
@@ -61,7 +61,7 @@ def resym(start,body):
             loc = pc + off
             vars[hex(loc)] = "var" + str(vcnt)
             vcnt += 1
-            print("\t", hex(loc))
+            # print("\t", hex(loc))
 
         # labels
         if block[0][:2] == "BR":
@@ -71,17 +71,26 @@ def resym(start,body):
             loc = pc + off
             lbls[hex(loc)] = "lbl" + str(lcnt)
             lcnt += 1
-            print("\t", hex(loc))
+            # print("\t", hex(loc))
 
-    print()
-    print("variables:")
-    for k in vars:
-        print(k,vars[k])
-    print()
-    print("labels:")
-    for k in lbls:
-        print(k,lbls[k])
-    print()
+        if block[0] == "JSR":
+            off = int(block[1].split("x")[1],16)
+            if off > 511:
+                off = off - 1024
+            loc = pc + off
+            lbls[hex(loc)] = "lbl" + str(lcnt)
+            lcnt += 1
+            # print("\t", hex(loc))
+
+    # print()
+    # print("variables:")
+    # for k in vars:
+    #     print(k,vars[k])
+    # print()
+    # print("labels:")
+    # for k in lbls:
+    #     print(k,lbls[k])
+    # print()
 
     pc = int(start,16)
 
@@ -109,6 +118,15 @@ def resym(start,body):
             off = int(block[1].split("x")[1],16)
             if off > 255:
                 off = off - 512
+            loc = pc + off
+            if hex(loc) in lbls:
+                code.append("\t"+ block[0] + " " + lbls[hex(loc)] + "\n")
+                continue
+
+        if block[0] == "JSR":
+            off = int(block[1].split("x")[1],16)
+            if off > 511:
+                off = off - 1024
             loc = pc + off
             if hex(loc) in lbls:
                 code.append("\t"+ block[0] + " " + lbls[hex(loc)] + "\n")

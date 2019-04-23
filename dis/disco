@@ -21,6 +21,7 @@ CNV="scripts/lc3_conv.py"
 ASM="scripts/lc3_asm.py"
 PAT="scripts/lc3_patch.py"
 STP="scripts/strip_cmt.py"
+RSM="scripts/lc3_resym.py"
 
 SIMP1="workbench/simpl/simp"
 SIMP2="workbench/simpl/simpl-2.0.3.bin"
@@ -61,6 +62,8 @@ function main()
     elif [ "$FLAG" = "-d" ] ; then      # disassemble
           $CNV 2 $2
           $DIS $2".out"
+          $STP $2".out.asm"
+          $RSM $2".out.asm.out"
     elif [ "$FLAG" = "-h" ] ; then       # help message
           echo; helpmsg; echo
     elif [ "$FLAG" = "-p" ] ; then      # patch
@@ -70,10 +73,12 @@ function main()
           $CNV 2 $2
           $DIS $2".out"
           $STP $2".out.asm"
-          $PAT $2".out.asm.out"
+          $RSM $2".out.asm.out"
           $STP $2".out.asm.out.asm"
-          cp  $2".out.asm.out.asm.out"  $2".out.asm.out.asm.out.asm"
-          $LC3ASS $2".out.asm.out.asm.out.asm"
+          $PAT $2".out.asm.out.asm.out"
+          $STP $2".out.asm.out.asm.out.asm"
+          cp  $2".out.asm.out.asm.out.asm.out"  $2".out.asm.out.asm.out.asm.out.asm"
+          $LC3ASS $2".out.asm.out.asm.out.asm.out.asm"
     elif [ "$FLAG" = "-s0" ] ; then      # simulate
           echo "Starting LC-3 Simulator CLI"
           $LC3SIM $FILES
