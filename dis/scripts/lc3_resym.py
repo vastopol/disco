@@ -133,6 +133,13 @@ def resym(start,body):
                 continue
 
         # else
+        if block[0] == "ADD" or block[0] == "AND" or block[0] == "LDR" or block[0] == "STR":
+            if block[3][0] == "x":
+                off = int(block[3].split("x")[1],16)
+                if off > 15:
+                    off = off - 32
+                    code.append("\t"+ block[0] + " " +  block[1] + " " + block[2] + " #" + str(off) + "\n")
+                    continue
 
         code.append("\t"+inst)
 

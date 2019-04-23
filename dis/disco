@@ -225,6 +225,8 @@ function tester()
         BOOM=${file%.*} # remove .asm from file name
         $CNV 2 "$TA$BOOM".obj
         $DIS "$TA$BOOM".obj.out
+        $STP "$TA$BOOM".obj.out.asm
+        $RSM "$TA$BOOM".obj.out.asm.out
     done
 
     echo
