@@ -34,7 +34,6 @@ def main(file):
         out_file.write(new_str+"\n")
 
     out_file.write(".END"+"\n")     # end of file
-
     out_file.close()
 
 #--------------------
@@ -69,8 +68,7 @@ def disass(line):
         # print("Error: illegal opcode")
         # return "ILLEGAL_OPCODE"
         op_str = ".FILL"
-        body_str = " x" + format(int(line,2),"X")
-        body_str += "    ; ILLEGAL_OPCODE ?"    # probably will ba a .FILL in a well formed file
+        body_str = " x" + format(int(line,2),"X")  # probably will be a .FILL in a well formed file
 
     elif op_str == "RTI":
         body_str = ""
@@ -81,22 +79,22 @@ def disass(line):
         trapno = str(format(int(body,2),"X"))
         if   trapno == "20":
             body_str = ""
-            op_str = "GETC    ; TRAP x20"
+            op_str = "GETC"
         elif trapno == "21":
             body_str = ""
-            op_str = "OUT    ; TRAP x21"
+            op_str = "OUT"
         elif trapno == "22":
             body_str = ""
-            op_str = "PUTS    ; TRAP x22"
+            op_str = "PUTS"
         elif trapno == "23":
             body_str = ""
-            op_str = "IN    ; TRAP x23"
+            op_str = "IN"
         elif trapno == "24":
             body_str = ""
-            op_str = "PUTSP    ; TRAP x24"
+            op_str = "PUTSP"
         elif trapno == "25":
             body_str = ""
-            op_str = "HALT    ; TRAP x25"
+            op_str = "HALT"
         else:  # assume is .FILL pseudo op
             op_str = ".FILL"
             body_str = " x" + format(int(line,2),"X")
@@ -105,9 +103,9 @@ def disass(line):
         jreg = body[3:6]
         body_str += " R"
         body_str += str(int(jreg,2))
-        if str(int(jreg,2)) == "7":
+        if str(int(jreg,2)) == "7":  # JMP R7 is return from subroutine
             body_str = ""
-            op_str = "RET    ; JMP R7"
+            op_str = "RET"
 
     elif op_str == "BR":    # check for .FILL
         nzp = body[:3]
@@ -120,13 +118,9 @@ def disass(line):
             op_str += "p"
         body_str += " x"
         body_str += format(int(br_offset,2),"X")
-        body_str += "    ; offset from PC"
         if int(nzp,2) == 0:  # assume is .FILL pseudo op, can't have no flags set
             op_str = ".FILL"
             body_str = " x" + format(int(line,2),"X")
-            if (int(line,2) > 31 and int(line,2) < 127): # ascii value
-                cmt_str = "    ;  '" + str(chr(int(line,2))) + "'"
-                body_str += cmt_str
 
     elif ( op_str == "LD" or op_str == "LDI" or op_str == "LEA" or  # check for .FILL
            op_str == "ST" or op_str == "STI" ):
@@ -136,7 +130,6 @@ def disass(line):
         body_str += str(int(reg,2))
         body_str += ", x"
         body_str += format(int(offset,2),"X")
-        body_str += "    ; offset from PC"  # ???
 
     elif op_str == "NOT":
         reg1 = body[:3]
@@ -156,7 +149,6 @@ def disass(line):
         body_str += str(int(reg2,2))
         body_str += ", x"
         body_str += format(int(offset,2),"X")
-        body_str += "    ; offset into pointer"  # ???
 
     elif op_str == "ADD" or op_str == "AND":
         reg1 = body[:3]
@@ -180,7 +172,6 @@ def disass(line):
         if flag == "1":
             body_str += " x"
             body_str += format(int(body[1:],2),"X")
-            body_str += "    ; offset from PC"  # ???
         else:
             op_str += "R"
             body_str += " R"

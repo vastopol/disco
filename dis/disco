@@ -213,6 +213,8 @@ function tester()
     chkdiff  $TB  .bin.out.out  .bin        # compare converted files
     echo
     $DIS  $TB*.bin                          # test disassembler
+    $STP  $TB*.bin.asm
+    $RSM  $TB*.bin.asm.out                  # test re-symbolizer
     echo
 
     # eventually collect all assemblable files into the assembly folder

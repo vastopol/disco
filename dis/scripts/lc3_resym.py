@@ -17,15 +17,14 @@ def main(file):
     orig_str = in_file.readline().strip()
     out_file.write(orig_str+"\n")
 
-    start = orig_str.split("x")[1]
-
-    # get the body, but remove .END
+    # get the body and remove .END
     body = []
     for line in in_file:
         body.append(line)
     body.pop()
 
-    # symbolize labelst and data
+    # symbolize labels and data
+    start = orig_str.split("x")[1]
     new_body = resym(start,body)
 
     # re-write body
@@ -35,7 +34,6 @@ def main(file):
     # re-insert the end marker
     end=".END"
     out_file.write(end)
-
     out_file.close()
 
 #--------------------
@@ -95,6 +93,7 @@ def resym(start,body):
     pc = int(start,16)
 
     # reprocess and insert names
+    # has many different if/else branching with continues
     for inst in body:
         block = inst.strip().split(" ")
         fin = ""
@@ -123,6 +122,7 @@ def resym(start,body):
                 code.append("\t"+ block[0] + " " + lbls[hex(loc)] + "\n")
                 continue
 
+        # labels
         if block[0] == "JSR":
             off = int(block[1].split("x")[1],16)
             if off > 511:
@@ -132,15 +132,67 @@ def resym(start,body):
                 code.append("\t"+ block[0] + " " + lbls[hex(loc)] + "\n")
                 continue
 
-        # else
+        # immediate signed 5-bit
         if block[0] == "ADD" or block[0] == "AND" or block[0] == "LDR" or block[0] == "STR":
             if block[3][0] == "x":
                 off = int(block[3].split("x")[1],16)
                 if off > 15:
                     off = off - 32
-                    code.append("\t"+ block[0] + " " +  block[1] + " " + block[2] + " #" + str(off) + "\n")
-                    continue
+                code.append("\t"+ block[0] + " " +  block[1] + " " + block[2] + " #" + str(off) + "\n")
+                continue
 
+        # trap/ret
+        if   block[0] == "GETC":
+            code.append("\t" + block[0] + "    ; TRAP x20\n")
+            continue
+        elif block[0] == "OUT":
+            code.append("\t" + block[0] + "    ; TRAP x21\n")
+            continue
+        elif block[0] == "PUTS":
+            code.append("\t" + block[0] + "    ; TRAP x22\n")
+            continue
+        elif block[0] == "IN":
+            code.append("\t" + block[0] + "    ; TRAP x23\n")
+            continue
+        elif block[0] == "PUTSP":
+            code.append("\t" + block[0] + "    ; TRAP x24\n")
+            continue
+        elif block[0] == "HALT":
+            code.append("\t" + block[0] + "    ; TRAP x25\n")
+            continue
+        elif block[0] == "RET":
+            code.append("\t" + block[0] + "    ; JMP R7\n")
+            continue
+
+        # special data
+        if block[0] == ".FILL":
+            off = int(block[1].split("x")[1],16)
+            if (off > 31 and off < 127): # ascii value
+                cmt_str = "    ;  '" + str(chr(off)) + "'"
+                code.append("\t" + block[0] + " " + block[1] + cmt_str + "\n")
+                continue
+            if off == 10: # newline
+                cmt_str = "    ;  '\\n'"
+                code.append("\t" + block[0] + " " + block[1] + cmt_str + "\n")
+                continue
+            if off == 65024: # KBSR xFE00
+                cmt_str = "    ;  KBSR"
+                code.append("\t" + block[0] + " " + block[1] + cmt_str + "\n")
+                continue
+            if off == 65026: # KBDR xFE02
+                cmt_str = "    ;  KBDR"
+                code.append("\t" + block[0] + " " + block[1] + cmt_str + "\n")
+                continue
+            if off == 65028: # DSR xFE04
+                cmt_str = "    ;  DSR"
+                code.append("\t" + block[0] + " " + block[1] + cmt_str + "\n")
+                continue
+            if off == 65030: # DDR xFE06
+                cmt_str = "    ;  DDR"
+                code.append("\t" + block[0] + " " + block[1] + cmt_str + "\n")
+                continue
+
+        # catch all...
         code.append("\t"+inst)
 
     return code
