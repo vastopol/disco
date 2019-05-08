@@ -99,9 +99,9 @@ def resym(start,body):
         fin = ""
 
         if hex(pc) in lbls:
-            code.append(lbls[hex(pc)] + ":\n")
+            code.append(lbls[hex(pc)] + "\n")
         elif hex(pc) in vars:
-            code.append(vars[hex(pc)] + ":\n")
+            code.append(vars[hex(pc)] + "\n")
         pc += 1
 
         # variables

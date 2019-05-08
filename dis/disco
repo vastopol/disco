@@ -7,7 +7,7 @@
 
 # TODO:
 # provide working assembler as an option: lc3_asm.py
-# make a resymbolizer
+# finish out the converter to replace the lc3convert binary
 
 #----------------------------------------
 
@@ -45,64 +45,85 @@ function main()
     fi
 
     # run sub programs with args
-    if   [ "$FLAG" = "-a" ] ; then      # assemble
-          $LC3ASS $2
-    elif [ "$FLAG" = "-b0" ] ; then     # bin to obj
-          $LC3CVT -b2  $2
-    elif [ "$FLAG" = "-b1" ] ; then     # hex to obj
-          $LC3CVT -b16 $2
-    elif [ "$FLAG" = "-b2" ] ; then     # bin to hex
-          $CNV 0 $FILES
-    elif [ "$FLAG" = "-b3" ] ; then     # hex to bin
-          $CNV 1 $FILES
-    elif [ "$FLAG" = "-b4" ] ; then     # obj to bin
-          $CNV 2 $FILES
-    elif [ "$FLAG" = "-c" ] ; then      # compile
-          $LC3CMP $FILES
-    elif [ "$FLAG" = "-d" ] ; then      # disassemble
-          $CNV 2 $2
-          $DIS $2".out"
-          $STP $2".out.asm"
-          $RSM $2".out.asm.out"
-    elif [ "$FLAG" = "-h" ] ; then       # help message
-          echo; helpmsg; echo
-    elif [ "$FLAG" = "-p" ] ; then      # patch
-          $STP $2
-          $PAT $2".out"
-    elif [ "$FLAG" = "-r" ] ; then      # reassemble
-          $CNV 2 $2
-          $DIS $2".out"
-          $STP $2".out.asm"
-          $RSM $2".out.asm.out"
-          $STP $2".out.asm.out.asm"
-          $PAT $2".out.asm.out.asm.out"
-          $STP $2".out.asm.out.asm.out.asm"
-          cp  $2".out.asm.out.asm.out.asm.out"  $2".out.asm.out.asm.out.asm.out.asm"
-          $LC3ASS $2".out.asm.out.asm.out.asm.out.asm"
-    elif [ "$FLAG" = "-s0" ] ; then      # simulate
-          echo "Starting LC-3 Simulator CLI"
-          $LC3SIM $FILES
-    elif [ "$FLAG" = "-s1" ] ; then      # simulate
-          echo "Starting simp CLI"
-          $SIMP1 $FILES
-    elif [ "$FLAG" = "-s2" ] ; then      # simulate
-          echo "Starting simpl GUI"
-          $SIMP2 $FILES
-    elif [ "$FLAG" = "-s3" ] ; then      # simulate
-          echo "Starting PennSim 1"
-          java -jar $PENN1 $FILES
-    elif [ "$FLAG" = "-s4" ] ; then      # simulate
-          echo "Starting PennSim 2"
-          java -jar $PENN2 $FILES
-    elif [ "$FLAG" = "-t0" ] ; then      # test convert/assemble
-          tester
-    elif [ "$FLAG" = "-t1" ] ; then      # test simulate
-          simulator
-    elif [ "$FLAG" = "-tc" ] ; then      # delete
-          cleaner
-    else                                 # ERROR
-          errmsg "Error: Unknown flag"
-    fi
+    case $FLAG in
+        -a) # assemble
+            $LC3ASS $2
+            ;;
+        -b0) # bin to obj
+            $LC3CVT -b2  $2
+            ;;
+        -b1) # hex to obj
+            $LC3CVT -b16 $2
+            ;;
+        -b2) # bin to hex
+            $CNV 0 $FILES
+            ;;
+        -b3) # hex to bin
+            $CNV 1 $FILES
+            ;;
+        -b4) # obj to bin
+            $CNV 2 $FILES
+            ;;
+        -c) # compile
+            $LC3CMP $FILES
+            ;;
+        -d) # disassemble
+            $CNV 2 $2
+            $DIS $2".out"
+            $STP $2".out.asm"
+            $RSM $2".out.asm.out"
+            ;;
+        -h) # help
+            echo; helpmsg; echo
+            ;;
+        -p) # patch
+            $STP $2
+            $PAT $2".out"
+            ;;
+        -r) # reassemble
+            $CNV 2 $2
+            $DIS $2".out"
+            $STP $2".out.asm"
+            $RSM $2".out.asm.out"
+            $STP $2".out.asm.out.asm"
+            $PAT $2".out.asm.out.asm.out"
+            $STP $2".out.asm.out.asm.out.asm"
+            cp   $2".out.asm.out.asm.out.asm.out"  $2".out.asm.out.asm.out.asm.out.asm"
+            $LC3ASS $2".out.asm.out.asm.out.asm.out.asm"
+            ;;
+        -s0) # simulate
+            echo "Starting LC-3 Simulator CLI"
+            $LC3SIM $FILES
+            ;;
+        -s1) # simulate
+            echo "Starting simp CLI"
+            $SIMP1 $FILES
+            ;;
+        -s2) # simulate
+            echo "Starting simpl GUI"
+            $SIMP2 $FILES
+            ;;
+        -s3) # simulate
+            echo "Starting PennSim 1"
+            java -jar $PENN1 $FILES
+            ;;
+        -s4) # simulate
+            echo "Starting PennSim 2"
+            java -jar $PENN2 $FILES
+            ;;
+        -t0) # test convert/assemble
+            tester
+            ;;
+        -t1) # test simulate
+            simulator
+            ;;
+        -tc) # delete
+            cleaner
+            ;;
+        *)  # ERROR
+            errmsg "Error: Unknown flag"
+            ;;
+    esac
 }
 
 #----------------------------------------

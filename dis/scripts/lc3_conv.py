@@ -9,6 +9,7 @@
 # 1 = hex to bin
 # 2 = obj to bin
 # 3 = bin to obj (fix)
+# 4 = hex to obj (fix)
 
 # files:
 # I/O ascii values:
@@ -47,8 +48,7 @@ def main(file,flag):
             else:
                 out_file.write(new_str+"\n") # every second byte
                 idx = 0
-
-    else:           # bin or hex file
+    else: # bin or hex file
         in_file = open(file,"r")
         for text in in_file:
             line = text.strip()
@@ -58,6 +58,8 @@ def main(file,flag):
                 new_str = hex2bin(line)
             elif flag == 3:
                 new_str = bin2obj(line)
+            elif flag == 4:
+                new_str = hex2obj(line)
             else:
                 print("ERROR")
                 exit(1)
@@ -145,6 +147,15 @@ def bin2obj(line):  # <------------- FIXME
     print("FIXME")
     return obj_str
 
+#--------------------
+
+def hex2obj(line):  # <------------- FIXME
+    global tables
+    obj_str = "xxxxxxxxxxxxxxxx"
+    # take the ascii and convert to actual raw object
+    print("FIXME")
+    return obj_str
+
 #========================================
 
 if __name__ == "__main__":
@@ -156,7 +167,7 @@ if __name__ == "__main__":
         print("Error: Incorrect mode, nondigit")
         print("Usage: $ ./conv.py <mode> <file>")
         sys.exit(1)
-    if not (0 <= int(sys.argv[1])) or not (int(sys.argv[1]) <= 3):
+    if not (0 <= int(sys.argv[1])) or not (int(sys.argv[1]) <= 4):
         print("Error: Incorrect mode, bounds")
         print("Usage: $ ./conv.py <mode> <file>")
         sys.exit(1)

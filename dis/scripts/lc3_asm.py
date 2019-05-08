@@ -13,13 +13,35 @@ import sys
 def main(file):
     print("assembling: ", file)
     in_file = open(file,"r")
-    out_file1 = open(file+".obj","w")
-    out_file2 = open(file+".sym","w")
+    out_file1 = open(file+".sym","w")
+    out_file2 = open(file+".obj","w")
+
+    # generic symbol table header
+    symtab_hd = '''// Symbol table
+// Scope level 0:
+//	Symbol Name       Page Address
+//	----------------  ------------
+'''
+    out_file1.write(symtab_hd)
+
+    body = []
+    syms = {}  # map : name -> address
+
+    # get the individual lines
     for line in in_file:
-        new_str = ass(line.strip())
-        out_file1.write(new_str+"\n")
-        out_file2.write(new_str+"\n")
-    out_file.close()
+        new_str = line.strip()
+        body.append(new_str)
+
+    # sym
+    for b in body:
+        out_file1.write("//  "+b+"\n")
+
+    # obj
+    for b in body:
+        out_file2.write(b+"\n")
+
+    out_file1.close()
+    out_file2.close()
 
 #--------------------
 
@@ -34,5 +56,6 @@ if __name__ == '__main__':
         print("Error: Missing Arguments")
         print("Usage: $ ./lc3_asm.py <file>")
         sys.exit(1)
+    files = sys.argv[1:]
     for file in files:
         main(file)
