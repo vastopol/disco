@@ -49,6 +49,10 @@ function main()
         -a) # assemble
             $LC3ASS $2
             ;;
+        -a1) # assemble with me
+            $STP $2
+            $ASM $2".out"
+            ;;
         -b0) # bin to obj
             $LC3CVT -b2  $2
             ;;
@@ -142,6 +146,7 @@ function helpmsg()
     echo "  $ ./disco -flag arguments"
     echo "Flags:"
     echo "  -a  = Assemble asm file"    # lc3as
+    echo "  -a1 = Assemble asm file - lc3_asm.py"    # lc3_asm.py
     echo "  -b0 = Convert bin to obj"   # lc3convert
     echo "  -b1 = Convert hex to obj"   # lc3convert
     echo "  -b2 = Convert bin to hex"   # lc3_conv.py

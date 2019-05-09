@@ -139,7 +139,7 @@ def disass(line):
         body_str += ", R"
         body_str += str(int(reg2,2))
 
-    elif op_str == "LDR" or op_str == "STR":
+    elif op_str == "LDR" or op_str == "STR": # check for .FILL
         reg1 = body[:3]
         reg2 = body[3:6]
         offset = body[6:]
@@ -149,6 +149,9 @@ def disass(line):
         body_str += str(int(reg2,2))
         body_str += ", x"
         body_str += format(int(offset,2),"X")
+        if int(offset,2)-32 > 15: # .FILL above 5 bit limit ???
+            op_str = ".FILL " + hex(int(line,2))
+            body_str = ""
 
     elif op_str == "ADD" or op_str == "AND":
         reg1 = body[:3]
