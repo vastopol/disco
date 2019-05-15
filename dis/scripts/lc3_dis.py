@@ -163,14 +163,16 @@ def disass(line):
         body_str += ", R"
         body_str += str(int(reg2,2))
         body_str += ", "
-        if flag == "1":
-            body_str += "x"
-            body_str += format(int(rest,2),"X")
-        else:
+        if flag == "0":
             body_str += "R"
             body_str += str(int(rest,2))
+        elif int(rest,2)-32 > 15: # .FILL above 5 bit limit ???
+            op_str = ".FILL " + hex(int(line,2))
+        else:
+            body_str += "x"
+            body_str += format(int(rest,2),"X")
 
-    elif op_str == "JSR":   # check for .FILL
+    elif op_str == "JSR":   # check for .FILL ?
         flag = body[0]
         if flag == "1":
             body_str += " x"

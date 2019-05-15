@@ -49,9 +49,9 @@ function main()
         -a) # assemble
             $LC3ASS $2
             ;;
-        -a1) # assemble with me
+        -a1) # assemble with mine
             $STP $2
-            $ASM $2".out"
+            $ASM $2.out
             ;;
         -b0) # bin to obj
             $LC3CVT -b2  $2
@@ -73,27 +73,23 @@ function main()
             ;;
         -d) # disassemble
             $CNV 2 $2
-            $DIS $2".out"
-            $STP $2".out.asm"
-            $RSM $2".out.asm.out"
+            $DIS $2.out
+            $RSM $2.out.asm
             ;;
         -h) # help
             echo; helpmsg; echo
             ;;
         -p) # patch
             $STP $2
-            $PAT $2".out"
+            $PAT $2.out
             ;;
         -r) # reassemble
             $CNV 2 $2
-            $DIS $2".out"
-            $STP $2".out.asm"
-            $RSM $2".out.asm.out"
-            $STP $2".out.asm.out.asm"
-            $PAT $2".out.asm.out.asm.out"
-            $STP $2".out.asm.out.asm.out.asm"
-            cp   $2".out.asm.out.asm.out.asm.out"  $2".out.asm.out.asm.out.asm.out.asm"
-            $LC3ASS $2".out.asm.out.asm.out.asm.out.asm"
+            $DIS $2.out
+            $RSM $2.out.asm
+            $STP $2.out.asm.asm
+            $PAT $2.out.asm.asm.out
+            $LC3ASS $2.out.asm.asm.out.asm
             ;;
         -s0) # simulate
             echo "Starting LC-3 Simulator CLI"
@@ -191,35 +187,31 @@ function cleaner()
 {
     echo; echo "cleaner"; echo
 
-    rm $TB*.asm > /dev/null 2>&1
-    rm $TB*.hex > /dev/null 2>&1
-    rm $TB*.obj > /dev/null 2>&1
-    rm $TB*.out > /dev/null 2>&1
+    rm $TB*.asm* > /dev/null 2>&1
+    rm $TB*.hex* > /dev/null 2>&1
+    rm $TB*.obj* > /dev/null 2>&1
+    rm $TB*.out* > /dev/null 2>&1
 
-    rm $TA*.obj > /dev/null 2>&1
-    rm $TA*.sym > /dev/null 2>&1
-    rm $TA*.out > /dev/null 2>&1
-    rm $TA*.out.asm > /dev/null 2>&1
+    rm $TA*.obj* > /dev/null 2>&1
+    rm $TA*.sym* > /dev/null 2>&1
+    rm $TA*.out* > /dev/null 2>&1
 
     # careful with the SimPrograms for Histogram && Invaders
     # dont want to delete the special .obj && .sym files
     DIR="$TS/AddOdd"
-    rm $DIR/*.obj > /dev/null 2>&1
-    rm $DIR/*.sym > /dev/null 2>&1
-    rm $DIR/*.out > /dev/null 2>&1
-    rm $DIR/*.out.asm > /dev/null 2>&1
+    rm $DIR/*.obj* > /dev/null 2>&1
+    rm $DIR/*.sym* > /dev/null 2>&1
+    rm $DIR/*.out* > /dev/null 2>&1
 
     DIR="$TS/Histogram"
-    rm $DIR/*.out > /dev/null 2>&1
-    rm $DIR/*.out.asm > /dev/null 2>&1
+    rm $DIR/*.out* > /dev/null 2>&1
     rm $DIR/hist.obj > /dev/null 2>&1
     rm $DIR/hist.sym > /dev/null 2>&1
     rm $DIR/testdata1.obj > /dev/null 2>&1
     rm $DIR/testdata1.sym > /dev/null 2>&1
 
     DIR="$TS/Invaders"
-    rm $DIR/*.out > /dev/null 2>&1
-    rm $DIR/*.out.asm > /dev/null 2>&1
+    rm $DIR/*.out* > /dev/null 2>&1
     rm $DIR/invaders.obj > /dev/null 2>&1
     rm $DIR/invaders.sym > /dev/null 2>&1
 }
@@ -239,8 +231,7 @@ function tester()
     chkdiff  $TB  .bin.out.out  .bin        # compare converted files
     echo
     $DIS  $TB*.bin                          # test disassembler
-    $STP  $TB*.bin.asm
-    $RSM  $TB*.bin.asm.out                  # test re-symbolizer
+    $RSM  $TB*.bin.asm                      # test re-symbolizer
     echo
 
     # eventually collect all assemblable files into the assembly folder
@@ -248,13 +239,12 @@ function tester()
     echo "assessemble disassemble"; echo    # test assemble and disassemble
     for file in $(ls $TA) ; do
         echo; echo "assessemble $file"; echo
-        $LC3ASS "$TA$file"
+        $LC3ASS $TA$file
         echo; echo "disassemble $file"; echo
         BOOM=${file%.*} # remove .asm from file name
-        $CNV 2 "$TA$BOOM".obj
-        $DIS "$TA$BOOM".obj.out
-        $STP "$TA$BOOM".obj.out.asm
-        $RSM "$TA$BOOM".obj.out.asm.out
+        $CNV 2 $TA$BOOM.obj
+        $DIS $TA$BOOM.obj.out
+        $RSM $TA$BOOM.obj.out.asm
     done
 
     echo

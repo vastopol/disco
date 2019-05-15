@@ -15,7 +15,7 @@ def main(file):
 
     # get the .ORIG start address
     orig_str = in_file.readline().strip()
-    out_file.write(orig_str+"\n")
+    out_file.write("    " + orig_str + "\n")
 
     # get the body and remove .END
     body = []
@@ -32,7 +32,7 @@ def main(file):
         out_file.write(x)
 
     # re-insert the end marker
-    end=".END"
+    end="    " + ".END"
     out_file.write(end)
     out_file.close()
 
