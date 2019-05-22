@@ -6,13 +6,23 @@ This project targets the LC-3 assembly programming language from Patt and Patel'
 
 ## The Disassembler
 
-`disco` is a linear sweep disassembler and tool-chain for the LC-3 assembly language
+`disco` is a disassembly tool-chain for the LC-3 assembly language
 
-disassembler prototype 1 complete
-
-currently working on completing a reassembling disassembler before starting the decompiler phase.
+prototype 1 complete:
+* linear sweep disassembler
+* resymbolizer
+* patcher
+* converter
 
 `disco` is integrated with the `lc3tools` and `lcc-1.3` C language compiler.
+
+prototype phase 2:
+* complete all the functionalities to replace the lc3tools with open source python implementations.
+    * bin2obj
+    * hex2obj
+    * assembler
+    * simulator
+* if possible fix lcc-1.3 compiler to actually output working assembly code.
 
 ## The Project
 

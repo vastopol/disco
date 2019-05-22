@@ -32,6 +32,13 @@ the untested are either in an incomplete state or have not been used yet
 TESTED (these work)
 ================================================================================
 
+* compiled_18.04_simpl.tgz
+
+executable files for simpl and the libraries got from anthony from jason in cs61 spring 2019.
+someone actually got the source code to compile
+
+----------------------------------------
+
 * simpl_bin.zip
 
 executable files for simpl and the libraries extracted from the CentosVM used to teach CS61 at UCR.
@@ -70,7 +77,7 @@ https://github.com/adithyabsk/LC3Programs
 https://github.com/JohnPhamous/lc3
 
 Contains an lc3 assembler/simulator written in Java.
-Uses a version of the lc3 which includes a MCR (machine control reg), MPR (memory protection reg), TMR/TMI (timer), and memory-mapped video RAM. 
+Uses a version of the lc3 which includes a MCR (machine control reg), MPR (memory protection reg), TMR/TMI (timer), and memory-mapped video RAM.
 The simulator's version of the lc3 ISA also includes an instruction that sets user/supervisor mode, jumpt.
 Site also has source code for an OS for the lc3. The OS code can be easily edited to convert it to standard lc3 ISA.
 
